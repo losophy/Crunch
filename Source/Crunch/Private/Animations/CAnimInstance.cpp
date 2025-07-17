@@ -16,7 +16,10 @@ void UCAnimInstance::NativeInitializeAnimation()
 
 void UCAnimInstance::NativeUpdateAnimation(float DeltaSeconds)
 {
-
+	if (OwnerCharacter)
+	{
+		Speed = OwnerCharacter->GetVelocity().Length();
+	}
 }
 
 void UCAnimInstance::NativeThreadSafeUpdateAnimation(float DeltaSeconds)
