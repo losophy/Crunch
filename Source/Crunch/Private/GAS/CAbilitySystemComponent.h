@@ -13,5 +13,11 @@ UCLASS()
 class UCAbilitySystemComponent : public UAbilitySystemComponent
 {
 	GENERATED_BODY()
+
+public:
+	void ApplyInitialEffects();
+
+private:
+	TArray<TSubclassOf<UGameplayEffect>> InitialEffects;
 	
 };
