@@ -16,4 +16,7 @@ class UGA_Combo : public UCGameplayAbility
 
 public:
 	virtual void ActivateAbility(const FGameplayAbilitySpecHandle Handle, const FGameplayAbilityActorInfo* ActorInfo, const FGameplayAbilityActivationInfo ActivationInfo, const FGameplayEventData* TriggerEventData) override;
+private:
+	UPROPERTY(EditDefaultsOnly, Category = "Animation")
+	UAnimMontage* ComboMontage;
 };
