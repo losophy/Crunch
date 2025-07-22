@@ -4,6 +4,7 @@
 
 #include "CoreMinimal.h"
 #include "AbilitySystemComponent.h"
+#include "GAS/CGameplayAbilityTypes.h"
 #include "CAbilitySystemComponent.generated.h"
 
 /**
@@ -22,9 +23,8 @@ private:
 	UPROPERTY(EditDefaultsOnly, Category = "Gameplay Effects")
 	TArray<TSubclassOf<UGameplayEffect>> InitialEffects;
 
-	UPROPERTY(EditDefaultsOnly, Category = "Gameplay Abilities")
-	TArray<TSubclassOf<UGameplayAbility>> Abilities;
-
-	UPROPERTY(EditDefaultsOnly, Category = "Gameplay Abilities")
-	TArray<TSubclassOf<UGameplayAbility>> BasicAbilities;
+	UPROPERTY(EditDefaultsOnLy, Category = "Gameplay Ability")
+	TMap<ECAbilityInputID, TSubclassOf<UGameplayAbility>> Abilities;
+	UPROPERTY(EditDefaultsOnly, Category = "Gameplay Ability")
+	TMap<ECAbilityInputID, TSubclassOf<UGameplayAbility>> BasicAbilities;
 };
