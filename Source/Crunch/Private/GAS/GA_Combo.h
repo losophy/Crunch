@@ -19,6 +19,7 @@ public:
 	virtual void ActivateAbility(const FGameplayAbilitySpecHandle Handle, const FGameplayAbilityActorInfo* ActorInfo, const FGameplayAbilityActivationInfo ActivationInfo, const FGameplayEventData* TriggerEventData) override;
 	static FGameplayTag GetComboChangedEventTag();
 	static FGameplayTag GetComboChangedEventEndTag();
+	static FGameplayTag GetComboTargetEventTag();
 
 private:
 	void SetupWaitComboInputPress();
@@ -33,6 +34,9 @@ private:
 
 	UFUNCTION()
 	void ComboChangedEventReceived(FGameplayEventData Data);
+
+	UFUNCTION()
+	void DoDamage(FGameplayEventData Data);
 
 	FName NextComboName;
 };
