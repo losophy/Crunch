@@ -17,7 +17,8 @@ UAnimInstance* UCGameplayAbility::GetOwnerAnimInstance() const
 
 TArray<FHitResult> UCGameplayAbility::GetHitResultFromSweepLocationTargetData(const FGameplayAbilityTargetDataHandle& TargetDataHandle, float SphereSweepRadius, bool bDrawDebug, bool bIgnoreSelf) const
 {
-    TArray<FHitResult> OutResult;
+    TArray<FHitResult> OutResults;
+    TSet<AActor*> HitActors;
 
     for (const TSharedPtr<FGameplayAbilityTargetData> TargetData : TargetDataHandle.Data)
     {
@@ -37,7 +38,18 @@ TArray<FHitResult> UCGameplayAbility::GetHitResultFromSweepLocationTargetData(co
 
         TArray<FHitResult> Results;
         UKismetSystemLibrary::SphereTraceMultiForObjects(this, StartLoc, EndLoc, SphereSweepRadius, ObjectTypes, false, ActorsToIgnore, DrawDebugTrace, Results, false);
+
+        for (const FHitResult& Result : Results)
+        {
+            if (HitActors.Contains(Result.GetActor()))
+            {
+                continue;
+            }
+
+            HitActors.Add(Result.GetActor());
+            OutResults.Add(Result);
+        }
     }
 
-    return OutResult;
+    return OutResults;
 }
