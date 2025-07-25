@@ -166,8 +166,16 @@ void ACCharacter::StartDeathSequence()
 
 void ACCharacter::Respawn()
 {
-	UE_LOG(LogTemp, Warning, TEXT("Respawn"));
 	OnRespawn();
+	GetCapsuleComponent()->SetCollisionEnabled(ECollisionEnabled::QueryAndPhysics);
+	GetCharacterMovement()->SetMovementMode(EMovementMode::MOVE_Walking);
+	GetMesh()->GetAnimInstance()->StopAllMontages(0.f);
+	SetStatusGaugeEnabled(true);
+
+	if (CAbilitySystemComponent)
+	{
+		CAbilitySystemComponent->ApplyFullStatEffect();
+	}
 }
 
 void ACCharacter::OnDead()
