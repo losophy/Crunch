@@ -10,6 +10,7 @@
 #include "GAS/CAttributeSet.h"
 #include "GAS/CAbilitySystemStatics.h"
 #include "Kismet/GameplayStatics.h"
+#include "Net/UnrealNetwork.h"
 #include "Widgets/OverHeadStatsGauge.h"
 
 // Sets default values
@@ -43,6 +44,12 @@ void ACCharacter::ClientSideInit()
 bool ACCharacter::IsLocallyControlledByPlayer() const
 {
 	return GetController() && GetController()->IsLocalPlayerController();
+}
+
+void ACCharacter::GetLifetimeReplicatedProps(TArray<FLifetimeProperty>& OutLifetimeProps) const
+{
+	Super::GetLifetimeReplicatedProps(OutLifetimeProps);
+	DOREPLIFETIME(ACCharacter, TeamID);
 }
 
 void ACCharacter::PossessedBy(AController* NewController)
@@ -209,5 +216,15 @@ void ACCharacter::OnDead()
 
 void ACCharacter::OnRespawn()
 {
+}
+
+void ACCharacter::SetGenericTeamId(const FGenericTeamId& NewTeamID)
+{
+	TeamID = NewTeamID;
+}
+
+FGenericTeamId ACCharacter::GetGenericTeamId() const
+{
+	return TeamID;
 }
 
