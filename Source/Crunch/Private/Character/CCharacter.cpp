@@ -204,6 +204,15 @@ void ACCharacter::Respawn()
 	GetMesh()->GetAnimInstance()->StopAllMontages(0.f);
 	SetStatusGaugeEnabled(true);
 
+	if (HasAuthority() && GetController())
+	{
+		TWeakObjectPtr<AActor> StartSpot = GetController()->StartSpot;
+		if (StartSpot.IsValid())
+		{
+			SetActorTransform(StartSpot->GetActorTransform());
+		}
+	}
+
 	if (CAbilitySystemComponent)
 	{
 		CAbilitySystemComponent->ApplyFullStatEffect();

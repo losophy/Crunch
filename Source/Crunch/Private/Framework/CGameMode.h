@@ -23,5 +23,5 @@ private:
 	AActor* FindNextStartSpotForTeam(const FGenericTeamId& TeamID) const;
 
 	UPROPERTY(EditDefaultsOnly, Category = "Team")
-	TMap<FGenericTeamId, FName> TeamStartSoptTagMap;
+	TMap<FGenericTeamId, FName> TeamStartSpotTagMap;
 };

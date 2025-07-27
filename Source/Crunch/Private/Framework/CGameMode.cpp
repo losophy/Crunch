@@ -29,7 +29,7 @@ FGenericTeamId ACGameMode::GetTeamIDForPlayer(const APlayerController* PlayerCon
 
 AActor* ACGameMode::FindNextStartSpotForTeam(const FGenericTeamId& TeamID) const
 {
-	const FName* StartSpotTag = TeamStartSoptTagMap.Find(TeamID);
+	const FName* StartSpotTag = TeamStartSpotTagMap.Find(TeamID);
 	if (!StartSpotTag)
 	{
 		return nullptr;
