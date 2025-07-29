@@ -11,6 +11,8 @@
 #include "GAS/CAbilitySystemStatics.h"
 #include "Kismet/GameplayStatics.h"
 #include "Net/UnrealNetwork.h"
+#include "Perception/AIPerceptionStimuliSourceComponent.h"
+#include "Perception/AISense_Sight.h"
 #include "Widgets/OverHeadStatsGauge.h"
 
 // Sets default values
@@ -26,6 +28,8 @@ ACCharacter::ACCharacter()
 	OverHeadWidgetComponent->SetupAttachment(GetRootComponent());
 
 	BindGASChangeDelegates();
+
+	PerceptionStimulisourceComponent = CreateDefaultSubobject<UAIPerceptionStimuliSourceComponent>("Perception Stimuli Source Component");
 }
 
 void ACCharacter::ServerSideInit()
@@ -67,6 +71,8 @@ void ACCharacter::BeginPlay()
 	Super::BeginPlay();
 	ConfigureOverHeadStatusWidget();
 	MeshRelativeTransform = GetMesh()->GetRelativeTransform();
+
+	PerceptionStimulisourceComponent->RegisterForSense(UAISense_Sight::StaticClass());
 }
 
 // Called every frame
