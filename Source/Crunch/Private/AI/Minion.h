@@ -18,11 +18,15 @@ public:
 
 	bool IsActive() const;
 	void Activate();
+	void SetGoal(AActor* Goal);
 
 private:
 	void PickSkinBasedOnTeamID();
 
 	virtual void OnRep_TeamID() override;
+
+	UPROPERTY(EditDefaultsOnly, Category = "AI")
+	FName GoalBlackboardKeyName = "Goal";
 
 	UPROPERTY(EditDefaultsOnly, Category = "Visual")
 	TMap<FGenericTeamId, USkeletalMesh*> SkinMap;
