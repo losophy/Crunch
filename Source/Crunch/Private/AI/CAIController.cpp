@@ -35,12 +35,13 @@ ACAIController::ACAIController()
 void ACAIController::OnPossess(APawn* NewPawn)
 {
 	Super::OnPossess(NewPawn);
-	SetGenericTeamId(FGenericTeamId(0));
 
 	IGenericTeamAgentInterface* PawnTeamInterface = Cast<IGenericTeamAgentInterface>(NewPawn);
 	if (PawnTeamInterface)
 	{
-		PawnTeamInterface->SetGenericTeamId(GetGenericTeamId());
+		SetGenericTeamId(PawnTeamInterface->GetGenericTeamId());
+		ClearAndDisableAllSenses();
+		EnableAllSenses();
 	}	
 
 	UAbilitySystemComponent* PawnASC = UAbilitySystemBlueprintLibrary::GetAbilitySystemComponent(NewPawn);
