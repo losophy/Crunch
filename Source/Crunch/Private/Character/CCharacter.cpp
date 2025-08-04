@@ -160,9 +160,21 @@ void ACCharacter::SetStatusGaugeEnabled(bool bIsEnabled)
 	}
 }
 
+bool ACCharacter::IsDead() const
+{
+	return GetAbilitySystemComponent()->HasMatchingGameplayTag(UCAbilitySystemStatics::GetDeadStatTag());
+}
+
+void ACCharacter::RespawnImmediately()
+{
+	if (HasAuthority())
+		GetAbilitySystemComponent()->RemoveActiveEffectsWithGrantedTags(FGameplayTagContainer(UCAbilitySystemStatics::GetDeadStatTag()));
+}
+
 void ACCharacter::DeathMontageFinished()
 {
-	SetRagdollEnabled(true);
+	if(IsDead())
+		SetRagdollEnabled(true);
 }
 
 void ACCharacter::SetRagdollEnabled(bool bIsEnabled)
