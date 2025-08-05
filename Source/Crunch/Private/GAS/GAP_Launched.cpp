@@ -2,6 +2,7 @@
 
 
 #include "GAS/GAP_Launched.h"
+#include "GAS/CAbilitySystemStatics.h"
 
 UGAP_Launched::UGAP_Launched()
 {
@@ -10,6 +11,7 @@ UGAP_Launched::UGAP_Launched()
 	TriggerData.TriggerSource = EGameplayAbilityTriggerSource::GameplayEvent;
 	TriggerData.TriggerTag = GetLauchedAbilityActiationTag();
 
+	ActivationBlockedTags.RemoveTag(UCAbilitySystemStatics::GetStunStatTag());
 	AbilityTriggers.Add(TriggerData);
 }
 
