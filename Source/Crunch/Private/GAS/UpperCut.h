@@ -15,7 +15,7 @@ class UUpperCut : public UCGameplayAbility
 	GENERATED_BODY()
 public:
 	virtual void ActivateAbility(const FGameplayAbilitySpecHandle Handle, const FGameplayAbilityActorInfo* ActorInfo, const FGameplayAbilityActivationInfo ActivationInfo, const FGameplayEventData* TriggerEventData) override;
-
+	UUpperCut();
 private:
 	UPROPERTY(EditDefaultsOnly, Category = "Launch")
 	TSubclassOf<UGameplayEffect> LaunchDamageEffect;
@@ -36,6 +36,9 @@ private:
 
 	UFUNCTION()
 	void HandleComboChangeEvent(FGameplayEventData EventData);
+
+	UFUNCTION()
+	void HandleComboCommitEvent(FGameplayEventData EventData);
 
 	FName NextComboName;
 };

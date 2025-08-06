@@ -16,6 +16,7 @@ class UCAbilitySystemStatics : public UBlueprintFunctionLibrary
 	GENERATED_BODY()
 public:
 	static FGameplayTag	GetBasicAttackAbilityTag();
+	static FGameplayTag GetBasicAttackInputPressedTag();
 	static FGameplayTag GetDeadStatTag();
-	static FGameplayTag GetStunStatTag();
+	static FGameplayTag GetStunStatTag();	
 };
