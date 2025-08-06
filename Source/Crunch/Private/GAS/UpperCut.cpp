@@ -42,6 +42,19 @@ FGameplayTag UUpperCut::GetUpperCutLaunchTag()
 	return FGameplayTag::RequestGameplayTag("ability.uppercut.launch");
 }
 
+const FGenericDamgeEffectDef* UUpperCut::GetDamageEffectDefForCurrentCombo() const
+{
+	UAnimInstance* OwnerAnimInstance = GetOwnerAnimInstance();
+	if (OwnerAnimInstance)
+	{
+		FName CurrentComboName = OwnerAnimInstance->Montage_GetCurrentSection(UpperCutMontage);
+		const FGenericDamgeEffectDef* EffectDef = ComboDamageMap.Find(CurrentComboName);
+		return EffectDef;
+	}
+		
+	return nullptr;
+}
+
 void UUpperCut::StartLaunching(FGameplayEventData EventData)
 {
 	if (K2_HasAuthority())
@@ -65,7 +78,7 @@ void UUpperCut::StartLaunching(FGameplayEventData EventData)
 
 	UAbilityTask_WaitGameplayEvent* WaitComboDamageEvent = UAbilityTask_WaitGameplayEvent::WaitGameplayEvent(this, UGA_Combo::GetComboTargetEventTag());
 	WaitComboDamageEvent->EventReceived.AddDynamic(this, &UUpperCut::HandleComboDamageEvent);
-	WaitComboCommitEvent->ReadyForActivation();
+	WaitComboDamageEvent->ReadyForActivation();
 }
 
 void UUpperCut::HandleComboChangeEvent(FGameplayEventData EventData)
@@ -97,7 +110,6 @@ void UUpperCut::HandleComboCommitEvent(FGameplayEventData EventData)
 	{
 		return;
 	}
-
 	OwnerAnimInst->Montage_SetNextSection(OwnerAnimInst->Montage_GetCurrentSection(UpperCutMontage), NextComboName, UpperCutMontage);
 }
 
@@ -107,10 +119,17 @@ void UUpperCut::HandleComboDamageEvent(FGameplayEventData EventData)
 	{
 		TArray<FHitResult> TargetHitResults = GetHitResultFromSweepLocationTargetData(EventData.TargetData, TargetSweepSphereRadius, ETeamAttitude::Hostile, ShouldDrawDebug());
 		PushTarget(GetAvatarActorFromActorInfo(), FVector::UpVector * UpperComboHoldSpeed);
+		const FGenericDamgeEffectDef* EffectDef = GetDamageEffectDefForCurrentCombo();
+		if (!EffectDef)
+		{
+			return;
+		}
+
 		for (FHitResult& HitResult : TargetHitResults)
 		{
-			PushTarget(HitResult.GetActor(), FVector::UpVector * UpperComboHoldSpeed);
-			ApplyGameplayEffectToHitResultActor(HitResult, LaunchDamageEffect, GetAbilityLevel(CurrentSpecHandle, CurrentActorInfo));
+			FVector PushVel = GetAvatarActorFromActorInfo()->GetActorTransform().TransformVector(EffectDef->PushVelocity);
+			PushTarget(HitResult.GetActor(), PushVel);
+			ApplyGameplayEffectToHitResultActor(HitResult, EffectDef->DamageEffect, GetAbilityLevel(CurrentSpecHandle, CurrentActorInfo));
 		}
 	}
 }

@@ -4,6 +4,7 @@
 
 #include "CoreMinimal.h"
 #include "GAS/CGameplayAbility.h"
+#include "GAS/CGameplayAbilityTypes.h"
 #include "UpperCut.generated.h"
 
 /**
@@ -17,6 +18,9 @@ public:
 	virtual void ActivateAbility(const FGameplayAbilitySpecHandle Handle, const FGameplayAbilityActorInfo* ActorInfo, const FGameplayAbilityActivationInfo ActivationInfo, const FGameplayEventData* TriggerEventData) override;
 	UUpperCut();
 private:
+	UPROPERTY(EditDefaultsOnly, Category = "Combo")
+	TMap<FName, FGenericDamgeEffectDef> ComboDamageMap;
+
 	UPROPERTY(EditDefaultsOnly, Category = "Launch")
 	TSubclassOf<UGameplayEffect> LaunchDamageEffect;
 
@@ -33,6 +37,8 @@ private:
 	UAnimMontage* UpperCutMontage;
 
 	static FGameplayTag GetUpperCutLaunchTag();
+
+	const FGenericDamgeEffectDef* GetDamageEffectDefForCurrentCombo() const;
 
 	UFUNCTION()
 	void StartLaunching(FGameplayEventData EventData);
