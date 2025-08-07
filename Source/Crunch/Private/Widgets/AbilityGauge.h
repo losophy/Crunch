@@ -32,6 +32,7 @@ class UAbilityGauge : public UUserWidget, public IUserObjectListEntry
 {
 	GENERATED_BODY()
 public:
+	virtual void NativeConstruct() override;
 	virtual void NativeOnListItemObjectSet(UObject* ListItemObject) override;
 	void ConfigureWithWidgetData(const FAbilityWidgetData* WidgetData);
 private:
@@ -49,4 +50,7 @@ private:
 
 	UPROPERTY(meta = (BindWidget))
 	class UTextBlock* CostText;
+
+	UPROPERTY()
+	class UGameplayAbility* AbilityCD0;
 };
