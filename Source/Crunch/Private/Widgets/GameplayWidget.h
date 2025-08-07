@@ -14,7 +14,7 @@ UCLASS()
 class UGameplayWidget : public UUserWidget
 {
 	GENERATED_BODY()
-private:
+public:
 	virtual void NativeConstruct() override;
 	void ConfigureAbilities(const TMap<ECAbilityInputID, TSubclassOf<class UGameplayAbility>>& Abilities);
 
@@ -24,6 +24,9 @@ private:
 
 	UPROPERTY(meta = (BindWidget))
 	class UValueGauge* ManaBar;
+
+	UPROPERTY(meta = (BindWidget))
+	class UAbilityListView* AbilityListView;
 
 	UPROPERTY()
 	class UAbilitySystemComponent* OwnerAbilitySystemComponent;
