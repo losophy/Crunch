@@ -21,13 +21,13 @@ public:
 	void ClientSideInit();
 	bool IsLocallyControlledByPlayer() const;
 	virtual void GetLifetimeReplicatedProps(TArray<FLifetimeProperty>& OutLifetimeProps) const override;
-
-	//only calledon the server
-	virtual void PossessedBy(AController* NewController) override;
+	const TMap<ECAbilityInputID, TSubclassOf<UGameplayAbility>>& GetAbilities() const;
 
 protected:
 	// Called when the game starts or when spawned
 	virtual void BeginPlay() override;
+	//only calledon the server
+	virtual void PossessedBy(AController* NewController) override;
 
 public:	
 	// Called every frame

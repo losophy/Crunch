@@ -57,6 +57,11 @@ void ACCharacter::GetLifetimeReplicatedProps(TArray<FLifetimeProperty>& OutLifet
 	DOREPLIFETIME(ACCharacter, TeamID);
 }
 
+const TMap<ECAbilityInputID, TSubclassOf<UGameplayAbility>>& ACCharacter::GetAbilities() const
+{
+	return CAbilitySystemComponent->GetAbilities();
+}
+
 void ACCharacter::PossessedBy(AController* NewController)
 {
 	Super::PossessedBy(NewController);
