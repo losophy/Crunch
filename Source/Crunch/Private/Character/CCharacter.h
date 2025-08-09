@@ -52,6 +52,7 @@ private:
 	void StunTagUpdated(const FGameplayTag Tag, int32 NewCount);
 	void AimTagUpdated(const FGameplayTag Tag, int32 NewCount);
 	void SetIsAimming(bool bIsAimming);
+	virtual void OnAimStateChanged(bool bIsAiming);
 
 	UPROPERTY(VisibleDefaultsOnly, Category = "Gameplay Ability")
 	class UCAbilitySystemComponent* CAbilitySystemComponent;

@@ -30,6 +30,12 @@ private:
 	FVector	GetLookRightDir() const;
 	FVector	GetLookFwdDir()	const;
 	FVector	GetMoveFwdDir() const;
+	/********************************************/
+	/*                 Gameplay Ability         */
+	/********************************************/
+private:
+	virtual void OnAimStateChanged(bool bIsAimming) override;
+
 
 	/********************************************/
 	/*                 Input                    */
@@ -65,5 +71,18 @@ private:
 
 	virtual void OnDead() override;
 	virtual void OnRespawn() override;
+	/********************************************/
+	/*                 Camer View              */
+	/********************************************/
+private:
+	UPROPERTY(EditDefaultsOnly, Category = view)
+	FVector CameraAimLocalOffset;
 
+	UPROPERTY(EditDefaultsOnly, Category = view)
+	float CamerLerpSpeed = 20.f;
+
+	FTimerHandle CamerLerpTimerHandle;
+
+	void LerpCameraToLocalOffsetLocation(const FVector& Goal);
+	void TickCameraLocalOffsetLerp(FVector Goal);
 };
