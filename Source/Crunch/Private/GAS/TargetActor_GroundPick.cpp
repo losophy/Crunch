@@ -100,5 +100,10 @@ FVector ATargetActor_GroundPick::GetTargetPoint() const
 		return GetActorLocation();
 	}	
 
+	if (bShouldDrawDebug)
+	{
+		DrawDebugSphere(GetWorld(), TraceResult.ImpactPoint, TargetAreaRadius, 32, FColor::Red);
+	}	
+
 	return TraceResult.ImpactPoint;
 }
