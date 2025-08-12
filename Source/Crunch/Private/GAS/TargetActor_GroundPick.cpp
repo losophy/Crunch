@@ -4,6 +4,7 @@
 #include "GAS/TargetActor_GroundPick.h"
 #include "Abilities/GameplayAbility.h"
 #include "AbilitySystemBlueprintLibrary.h"
+#include "Components/DecalComponent.h"
 #include "Crunch/Crunch.h"
 #include "Engine/OverlapResult.h"
 #include "GenericTeamAgentInterface.h"
@@ -11,11 +12,18 @@
 ATargetActor_GroundPick::ATargetActor_GroundPick()
 {
 	PrimaryActorTick.bCanEverTick = true;
+
+	SetRootComponent(CreateDefaultSubobject<USceneComponent>("Root Comp"));
+
+	DecalComp = CreateDefaultSubobject<UDecalComponent>("Decal Comp");
+
+	DecalComp->SetupAttachment(GetRootComponent());
 }
 
 void ATargetActor_GroundPick::SetTargetAreaRadius(float NewRadius)
 {
 	TargetAreaRadius = NewRadius;
+	DecalComp->DecalSize = FVector{ NewRadius };
 }
 
 void ATargetActor_GroundPick::ConfirmTargetingAndContinue()
