@@ -3,9 +3,9 @@
 #pragma once
 
 #include "CoreMinimal.h"
-#include "GameplayEffectTypes.h"
-#include "Blueprint/UserWidget.h"
 #include "AttributeSet.h"
+#include "Blueprint/UserWidget.h"
+#include "GameplayEffectTypes.h"
 #include "StatsGauge.generated.h"
 
 /**
