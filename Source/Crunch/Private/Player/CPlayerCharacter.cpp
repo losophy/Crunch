@@ -28,7 +28,7 @@ ACPlayerCharacter::ACPlayerCharacter()
 	GetCharacterMovement()->bOrientRotationToMovement = true;
 	GetCharacterMovement()->RotationRate = FRotator(0.f, 720.f, 0.f);
 
-	HeorAttributeSet = CreateDefaultSubobject<UCHeroAttributeSet>("Hero Attribute Set");
+	HeroAttributeSet = CreateDefaultSubobject<UCHeroAttributeSet>("Hero Attribute Set");
 }
 
 void ACPlayerCharacter::PawnClientRestart()
