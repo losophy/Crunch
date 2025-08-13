@@ -32,3 +32,39 @@ public:
 	UPROPERTY(EditAnywhere)
 	FVector PushVelocity;
 };
+
+USTRUCT(BlueprintType)
+struct FHeroBaseStats : public FTableRowBase
+{
+	GENERATED_BODY()
+
+	UPROPERTY(EditAnywhere)
+	TSubclassOf<AActor> Class;
+
+	UPROPERTY(EditAnywhere)
+	float Strength;
+
+	UPROPERTY(EditAnywhere)
+	float Intelligence;
+
+	UPROPERTY(EditAnywhere)
+	float StrengthGrowthRate;
+
+	UPROPERTY(EditAnywhere)
+	float IntelligenceGrowthRate;
+
+	UPROPERTY(EditAnywhere)
+	float BaseMaxHealth;
+
+	UPROPERTY(EditAnywhere)
+	float BaseMaxMana;
+
+	UPROPERTY(EditAnywhere)
+	float BaseAttackDamage;
+
+	UPROPERTY(EditAnywhere)
+	float BaseArmor;
+
+	UPROPERTY(EditAnywhere)
+	float BaseMoveSpeed;
+};
