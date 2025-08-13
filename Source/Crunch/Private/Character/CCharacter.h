@@ -5,6 +5,7 @@
 #include "CoreMinimal.h"
 #include "GAS/CGameplayAbilityTypes.h"
 #include "GameFramework/Character.h"
+#include "GameplayEffectTypes.h"
 #include "GameplayTagContainer.h"
 #include "AbilitySystemInterface.h"
 #include "GenericTeamAgentInterface.h"
@@ -53,6 +54,7 @@ private:
 	void AimTagUpdated(const FGameplayTag Tag, int32 NewCount);
 	void SetIsAimming(bool bIsAimming);
 	virtual void OnAimStateChanged(bool bIsAiming);
+	void MoveSpeedUpdated(const FOnAttributeChangeData& Data);
 
 	UPROPERTY(VisibleDefaultsOnly, Category = "Gameplay Ability")
 	class UCAbilitySystemComponent* CAbilitySystemComponent;
