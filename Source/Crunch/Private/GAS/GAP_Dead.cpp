@@ -49,6 +49,31 @@ void UGAP_Dead::ActivateAbility(const FGameplayAbilitySpecHandle Handle, const F
 
 		float TotalExperienceReward = BaseExperienceReward + ExperienceRewardPerExperience * SelfExperience;
 		float TotalGoldReward = BaseGoldReward + GoldRewardPerExperience * SelfExperience;
+
+		if (Killer)
+		{
+			float KillerExperienceReward = TotalExperienceReward * KillerRewardPortion;
+			float KillerGoldReward = TotalGoldReward * KillerRewardPortion;
+
+			FGameplayEffectSpecHandle EffectSpec = MakeOutgoingGameplayEffectSpec(RewardEffect);
+			EffectSpec.Data->SetSetByCallerMagnitude(UCAbilitySystemStatics::GetExperienceAttributeTag(), KillerExperienceReward);
+			EffectSpec.Data->SetSetByCallerMagnitude(UCAbilitySystemStatics::GetGoldAttributeTag(), KillerGoldReward);
+
+			K2_ApplyGameplayEffectSpecToTarget(EffectSpec, UAbilitySystemBlueprintLibrary::AbilityTargetDataFromActor(Killer));
+
+			TotalExperienceReward -= KillerExperienceReward;
+			TotalGoldReward -= KillerGoldReward;
+		}
+
+		float ExperiencePerTarget = TotalExperienceReward / RewardTargets.Num();
+		float GoldPerTarget = TotalGoldReward / RewardTargets.Num();
+
+		FGameplayEffectSpecHandle EffectSpec = MakeOutgoingGameplayEffectSpec(RewardEffect);
+		EffectSpec.Data->SetSetByCallerMagnitude(UCAbilitySystemStatics::GetExperienceAttributeTag(), ExperiencePerTarget);
+		EffectSpec.Data->SetSetByCallerMagnitude(UCAbilitySystemStatics::GetGoldAttributeTag(), GoldPerTarget);
+
+		K2_ApplyGameplayEffectSpecToTarget(EffectSpec, UAbilitySystemBlueprintLibrary::AbilityTargetDataFromActorArray(RewardTargets, true));
+		K2_EndAbility();
 	}
 }
 
