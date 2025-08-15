@@ -55,6 +55,8 @@ private:
 	void SetIsAimming(bool bIsAimming);
 	virtual void OnAimStateChanged(bool bIsAiming);
 	void MoveSpeedUpdated(const FOnAttributeChangeData& Data);
+	void MaxHealthUpdated(const FOnAttributeChangeData& Data);
+	void MaxManaUpdated(const FOnAttributeChangeData& Data);
 
 	UPROPERTY(VisibleDefaultsOnly, Category = "Gameplay Ability")
 	class UCAbilitySystemComponent* CAbilitySystemComponent;
