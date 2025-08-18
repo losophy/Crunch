@@ -112,6 +112,14 @@ bool ACCharacter::Server_SendGameplayEventToSelf_Validate(const FGameplayTag& Ev
 	return true;
 }
 
+void ACCharacter::UpgradeAbilityWithInputID(ECAbilityInputID InputID)
+{
+	if (CAbilitySystemComponent)
+	{
+		CAbilitySystemComponent->Server_UpgradeAbilityWithID(InputID);
+	}
+}
+
 void ACCharacter::BindGASChangeDelegates()
 {
 	if (CAbilitySystemComponent)
