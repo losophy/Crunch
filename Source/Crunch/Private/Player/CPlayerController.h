@@ -29,6 +29,8 @@ public:
 
 	virtual void GetLifetimeReplicatedProps(TArray< FLifetimeProperty>& OutLifetimeProps) const override;
 
+	virtual void SetupInputComponent() override;
+
 private:
 	void SpawnGameplayWidget();
 
@@ -43,4 +45,13 @@ private:
 
 	UPROPERTY(Replicated)
 	FGenericTeamId TeamID;
+
+	UPROPERTY(EditDefaultsOnly, Category = "Input")
+	class UInputMappingContext* UIInputMapping;
+
+	UPROPERTY(EditDefaultsOnly, Category = "Input")
+	class UInputAction* ShopToggleInputAction;
+
+	UFUNCTION()
+	void ToggleShop();
 };
