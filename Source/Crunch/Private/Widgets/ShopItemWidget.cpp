@@ -17,3 +17,13 @@ void UShopItemWidget::NativeOnListItemObjectSet(UObject* ListItemObject)
 	SetIcon(ShopItem->GetIcon());
 	SetToolTipWidget(ShopItem);
 }
+
+void UShopItemWidget::RightButtonClicked()
+{
+	OnItemPurchaseIssued.Broadcast(GetShopItem());
+}
+
+void UShopItemWidget::LeftButtonClicked()
+{
+	OnShopItemClicked.Broadcast(this);
+}

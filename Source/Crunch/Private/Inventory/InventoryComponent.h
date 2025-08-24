@@ -6,6 +6,8 @@
 #include "Components/ActorComponent.h"
 #include "InventoryComponent.generated.h"
 
+class UAbilitySystemComponent;
+class UPA_ShopItem;
 
 UCLASS( ClassGroup=(Custom), meta=(BlueprintSpawnableComponent) )
 class UInventoryComponent : public UActorComponent
@@ -16,13 +18,20 @@ public:
 	// Sets default values for this component's properties
 	UInventoryComponent();
 
+	void TryPurchase(const UPA_ShopItem* ItemToPurchase);
+	float GetGold() const;
+
 protected:
 	// Called when the game starts
 	virtual void BeginPlay() override;
 
-public:	
-	// Called every frame
-	virtual void TickComponent(float DeltaTime, ELevelTick TickType, FActorComponentTickFunction* ThisTickFunction) override;
+private:
+	UPROPERTY()
+	UAbilitySystemComponent* OwnerAbilitySystemComponent;
 
-		
+	/*********************************************************/
+	/*                   Server                              */
+	/*********************************************************/
+	UFUNCTION(Server, Reliable, WithValidation)
+	void Server_Purchase(const UPA_ShopItem* ItemToPurchase);
 };
