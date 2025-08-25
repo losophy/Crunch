@@ -6,6 +6,8 @@
 #include "UObject/NoExportTypes.h"
 #include "InventoryItem.generated.h"
 
+class UPA_ShopItem;
+
 USTRUCT()
 struct FInventoryItemHandle
 {
@@ -34,5 +36,12 @@ UCLASS()
 class UInventoryItem : public UObject
 {
 	GENERATED_BODY()
-	
+public:
+	void InitItem(const FInventoryItemHandle& NewHandle, const UPA_ShopItem* NewShopItem);
+	const UPA_ShopItem* GetShopItem() const { return ShopItem; }
+	FInventoryItemHandle GetHandle() const { return Handle; }
+private:
+	UPROPERTY()
+	const UPA_ShopItem* ShopItem;
+	FInventoryItemHandle Handle;
 };
