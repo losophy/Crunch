@@ -40,15 +40,21 @@ class UInventoryItem : public UObject
 {
 	GENERATED_BODY()
 public:
+	UInventoryItem();
+	bool IsValid() const;
 	void InitItem(const FInventoryItemHandle& NewHandle, const UPA_ShopItem* NewShopItem);
 	const UPA_ShopItem* GetShopItem() const { return ShopItem; }
 	FInventoryItemHandle GetHandle() const { return Handle; }
 	void ApplyGASModifications(UAbilitySystemComponent* AbilitySystemComponent);
+	FORCEINLINE int GetStackCount() const { return StackCount; }
+	void SetSlot(int NewSlot);
 
 private:
 	UPROPERTY()
 	const UPA_ShopItem* ShopItem;
 	FInventoryItemHandle Handle;
+	int StackCount;
+	int Slot;
 
 	FActiveGameplayEffectHandle AppliedEquipedEffectHandle;
 	FGameplayAbilitySpecHandle GrantedAbiltiySpecHandle;

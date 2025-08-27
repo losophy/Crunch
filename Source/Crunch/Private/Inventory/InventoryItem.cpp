@@ -55,6 +55,16 @@ uint32 GetTypeHash(const FInventoryItemHandle& Key)
 	return Key.GetHandleId();
 }
 
+UInventoryItem::UInventoryItem()
+	:StackCount{ 1 }
+{
+}
+
+bool UInventoryItem::IsValid() const
+{
+	return ShopItem != nullptr;
+}
+
 void UInventoryItem::InitItem(const FInventoryItemHandle& NewHandle, const UPA_ShopItem* NewShopItem)
 {
 	Handle = NewHandle;
@@ -88,4 +98,9 @@ void UInventoryItem::ApplyGASModifications(UAbilitySystemComponent* AbilitySyste
 			GrantedAbiltiySpecHandle = AbilitySystemComponent->GiveAbility(FGameplayAbilitySpec(GrantedAbility));
 		}
 	}
+}
+
+void UInventoryItem::SetSlot(int NewSlot)
+{
+	Slot = NewSlot;
 }
