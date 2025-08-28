@@ -69,3 +69,13 @@ void UInventoryItemWidget::UpdateStackCount()
 		StackCountText->SetText(FText::AsNumber(InventoryItem->GetStackCount()));
 	}
 }
+
+UTexture2D* UInventoryItemWidget::GetIconTexture() const
+{
+	if (InventoryItem && InventoryItem->GetShopItem())
+	{
+		return InventoryItem->GetShopItem()->GetIcon();
+	}
+
+	return nullptr;
+}
