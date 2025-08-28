@@ -28,6 +28,11 @@ public:
 	void ItemSlotChanged(const FInventoryItemHandle& Handle, int NewSlotNumber);
 	UInventoryItem* GetInventoryItemByHandle(const FInventoryItemHandle& Handle) const;
 
+	bool IsFullFor(const UPA_ShopItem* Item) const;
+
+	bool IsAllSlotOccupied() const;
+	UInventoryItem* GetAvaliableStackForItem(const UPA_ShopItem* Item) const;
+
 protected:
 	// Called when the game starts
 	virtual void BeginPlay() override;
