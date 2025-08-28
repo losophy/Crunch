@@ -16,6 +16,7 @@ void UInventoryWidget::NativeConstruct()
 		if (InventoryComponent)
 		{
 			InventoryComponent->OnItemAdded.AddUObject(this, &UInventoryWidget::ItemAdded);
+			InventoryComponent->OnItemStackCountChanged.AddUObject(this, &UInventoryWidget::ItemStackCountChanged);
 			int Capacity = InventoryComponent->GetCapacity();
 
 			ItemList->ClearChildren();
@@ -49,6 +50,15 @@ void UInventoryWidget::ItemAdded(const UInventoryItem* InventoryItem)
 		{
 			InventoryComponent->ItemSlotChanged(InventoryItem->GetHandle(), NextAvaliableSlot->GetSlotNumber());
 		}
+	}
+}
+
+void UInventoryWidget::ItemStackCountChanged(const FInventoryItemHandle& Handle, int NewCount)
+{
+	UInventoryItemWidget** FoundWidget = PopulatedItemEntryWidgets.Find(Handle);
+	if (FoundWidget)
+	{
+		(*FoundWidget)->UpdateStackCount();
 	}
 }
 

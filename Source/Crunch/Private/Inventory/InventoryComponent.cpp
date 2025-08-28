@@ -107,14 +107,36 @@ void UInventoryComponent::GrantItem(const UPA_ShopItem* NewItem)
 	if (!GetOwner()->HasAuthority())
 		return;
 
-	UInventoryItem* InventoryItem = NewObject<UInventoryItem>();
-	FInventoryItemHandle NewHandle = FInventoryItemHandle::CreateHandle();
-	InventoryItem->InitItem(NewHandle, NewItem);
-	InventoryMap.Add(NewHandle, InventoryItem);
-	OnItemAdded.Broadcast(InventoryItem);
-	UE_LOG(LogTemp, Warning, TEXT("Server Adding Shop Item: %s, with Id: %d"), *(InventoryItem->GetShopItem()->GetItemName().ToString()), NewHandle.GetHandleId());
-	Client_ItemAdded(NewHandle, NewItem);
-	InventoryItem->ApplyGASModifications(OwnerAbilitySystemComponent);
+	if (UInventoryItem* StackItem = GetAvaliableStackForItem(NewItem))
+	{
+		StackItem->AddStackCount();
+		OnItemStackCountChanged.Broadcast(StackItem->GetHandle(), StackItem->GetStackCount());
+		Client_ItemStackCountChanged(StackItem->GetHandle(), StackItem->GetStackCount());
+	}
+	else
+	{
+		UInventoryItem* InventoryItem = NewObject<UInventoryItem>();
+		FInventoryItemHandle NewHandle = FInventoryItemHandle::CreateHandle();
+		InventoryItem->InitItem(NewHandle, NewItem);
+		InventoryMap.Add(NewHandle, InventoryItem);
+		OnItemAdded.Broadcast(InventoryItem);
+		UE_LOG(LogTemp, Warning, TEXT("Server Adding Shop Item: %s, with Id: %d"), *(InventoryItem->GetShopItem()->GetItemName().ToString()), NewHandle.GetHandleId());
+		Client_ItemAdded(NewHandle, NewItem);
+		InventoryItem->ApplyGASModifications(OwnerAbilitySystemComponent);
+	}	
+}
+
+void UInventoryComponent::Client_ItemStackCountChanged_Implementation(FInventoryItemHandle Handle, int NewCount)
+{
+	if (GetOwner()->HasAuthority())
+		return;
+
+	UInventoryItem* FoundItem = GetInventoryItemByHandle(Handle);
+	if (FoundItem)
+	{
+		FoundItem->SetStackCount(NewCount);
+		OnItemStackCountChanged.Broadcast(Handle, NewCount);
+	}
 }
 
 void UInventoryComponent::Client_ItemAdded_Implementation(FInventoryItemHandle AssignedHandle, const UPA_ShopItem* Item)
@@ -137,7 +159,7 @@ void UInventoryComponent::Server_Purchase_Implementation(const UPA_ShopItem* Ite
 	if (GetGold() < ItemToPurchase->GetPrice())
 		return;
 
-	if (InventoryMap.Num() >= GetCapacity())
+	if (IsFullFor(ItemToPurchase))
 		return;
 
 	OwnerAbilitySystemComponent->ApplyModToAttribute(UCHeroAttributeSet::GetGoldAttribute(), EGameplayModOp::Additive, -ItemToPurchase->GetPrice());
