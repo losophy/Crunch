@@ -117,6 +117,41 @@ void UInventoryItem::InitItem(const FInventoryItemHandle& NewHandle, const UPA_S
 	ShopItem = NewShopItem;
 }
 
+bool UInventoryItem::TryActivateGrantedAbility(UAbilitySystemComponent* AbilitySystemComponent)
+{
+	if (!GrantedAbiltiySpecHandle.IsValid())
+		return false;
+
+	if (AbilitySystemComponent && AbilitySystemComponent->TryActivateAbility(GrantedAbiltiySpecHandle))
+		return true;
+
+	return false;
+}
+
+void UInventoryItem::ApplyConsumeEffect(UAbilitySystemComponent* AbilitySystemComponent)
+{
+	if (!ShopItem)
+		return;
+
+	TSubclassOf<UGameplayEffect> ConsumeEffect = ShopItem->GetConsumeEffect();
+	if (!ConsumeEffect)
+		return;
+
+	AbilitySystemComponent->BP_ApplyGameplayEffectToSelf(ConsumeEffect, 1, AbilitySystemComponent->MakeEffectContext());
+}
+
+void UInventoryItem::RemoveGASModifications(UAbilitySystemComponent* AbilitySystemComponent)
+{
+	if (!AbilitySystemComponent)
+		return;
+
+	if (AppliedEquipedEffectHandle.IsValid())
+		AbilitySystemComponent->RemoveActiveGameplayEffect(AppliedEquipedEffectHandle);
+
+	if (GrantedAbiltiySpecHandle.IsValid())
+		AbilitySystemComponent->SetRemoveAbilityOnEnd(GrantedAbiltiySpecHandle);
+}
+
 void UInventoryItem::ApplyGASModifications(UAbilitySystemComponent* AbilitySystemComponent)
 {
 	if (!GetShopItem() || !AbilitySystemComponent)
