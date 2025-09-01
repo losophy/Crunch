@@ -27,6 +27,7 @@ public:
 	FOnItemStackCountChangeDelegate OnItemStackCountChanged;
 	void TryActivateItem(const FInventoryItemHandle& ItemHandle);
 	void TryPurchase(const UPA_ShopItem* ItemToPurchase);
+	void SellItem(const FInventoryItemHandle& ItemHandle);
 	float GetGold() const;
 	FORCEINLINE int GetCapacity() const { return Capacity; }
 
@@ -59,6 +60,8 @@ private:
 	void Server_Purchase(const UPA_ShopItem* ItemToPurchase);
 	UFUNCTION(Server, Reliable, WithValidation)
 	void Server_ActivateItem(FInventoryItemHandle ItemHandle);
+	UFUNCTION(Server, Reliable, WithValidation)
+	void Server_SellItem(FInventoryItemHandle ItemHandle);
 	void GrantItem(const UPA_ShopItem* NewItem);
 	void ConsumeItem(UInventoryItem* Item);
 	void RemoveItem(UInventoryItem* Item);
