@@ -38,6 +38,8 @@ public:
 
 	bool IsAllSlotOccupied() const;
 	UInventoryItem* GetAvaliableStackForItem(const UPA_ShopItem* Item) const;
+	bool FoundIngredientForItem(const UPA_ShopItem* Item, TArray<UInventoryItem*>& OutIngredients);
+	UInventoryItem* TryGetItemForShopItem(const UPA_ShopItem* Item) const;
 
 protected:
 	// Called when the game starts
@@ -65,6 +67,7 @@ private:
 	void GrantItem(const UPA_ShopItem* NewItem);
 	void ConsumeItem(UInventoryItem* Item);
 	void RemoveItem(UInventoryItem* Item);
+	void CheckItemCombination(const UInventoryItem* NewItem);
 
 	/*********************************************************/
 	/*                   Client                              */

@@ -18,6 +18,8 @@ public:
 	static UCAssetManager& Get();
 	void LoadShopItems(const FStreamableDelegate& LoadFinishedCallback);
 	bool GetLoadedShopItems(TArray<const UPA_ShopItem*>& OutItems) const;
+	const FItemCollection* GetCombinationForItem(const UPA_ShopItem* Item) const;
+	const FItemCollection* GetIngredientForItem(const UPA_ShopItem* Item) const;
 private:
 	void ShopItemLoadFinished(FStreamableDelegate Callback);
 	void BuildItemMaps();
