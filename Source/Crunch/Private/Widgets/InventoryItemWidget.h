@@ -67,4 +67,10 @@ private:
 
 	UPROPERTY(EditDefaultsOnly, Category = "Drag Drop")
 	TSubclassOf<class UInventoryItemDragDropOp> DragDropOpClass;
+	/******************************************/
+	/*            GAS                         */
+	/******************************************/
+
+public:
+	void StartCooldown(float CooldownDuration, float TimeRemaining);
 };

@@ -58,4 +58,5 @@ private:
 
 	void HandleItemDragDrop(UInventoryItemWidget* DestinationWidget, UInventoryItemWidget* SourceWidget);
 	void ItemRemoved(const FInventoryItemHandle& ItemHandle);
+	void ItemAbilityCommitted(const FInventoryItemHandle& ItemHandle, float CooldownDuration, float CooldownTimeRemaining);
 };

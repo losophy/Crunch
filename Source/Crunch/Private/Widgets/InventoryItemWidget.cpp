@@ -130,3 +130,8 @@ bool UInventoryItemWidget::NativeOnDrop(const FGeometry& InGeometry, const FDrag
 
 	return Super::NativeOnDrop(InGeometry, InDragDropEvent, InOperation);
 }
+
+void UInventoryItemWidget::StartCooldown(float CooldownDuration, float TimeRemaining)
+{
+	UE_LOG(LogTemp, Warning, TEXT("Starting Cooldown"));
+}

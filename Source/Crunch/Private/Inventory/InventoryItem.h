@@ -52,6 +52,8 @@ public:
 
 	bool IsStackFull() const;
 	bool IsForItem(const UPA_ShopItem* Item) const;
+	bool IsGrantintAbility(TSubclassOf<class UGameplayAbility> AbilityClass) const;
+	bool IsGrantingAnyAbility() const;
 
 	UInventoryItem();
 	bool IsValid() const;

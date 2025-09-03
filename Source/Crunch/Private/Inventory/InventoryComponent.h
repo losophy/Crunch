@@ -13,6 +13,7 @@ class UPA_ShopItem;
 DECLARE_MULTICAST_DELEGATE_OneParam(FOnItemAddedDelegate, const UInventoryItem* /*NewItem*/);
 DECLARE_MULTICAST_DELEGATE_OneParam(FOnItemRemovedDelegate, const FInventoryItemHandle& /*ItemHandle*/);
 DECLARE_MULTICAST_DELEGATE_TwoParams(FOnItemStackCountChangeDelegate, const FInventoryItemHandle&, int /*NewCount*/);
+DECLARE_MULTICAST_DELEGATE_ThreeParams(FOnItemAbilityCommitted, const FInventoryItemHandle&, float /*CooldownDuration*/, float /*CooldownTimeRemaining*/);
 
 UCLASS( ClassGroup=(Custom), meta=(BlueprintSpawnableComponent) )
 class UInventoryComponent : public UActorComponent
@@ -25,6 +26,7 @@ public:
 	FOnItemAddedDelegate OnItemAdded;
 	FOnItemRemovedDelegate OnItemRemoved;
 	FOnItemStackCountChangeDelegate OnItemStackCountChanged;
+	FOnItemAbilityCommitted OnItemAbilityCommitted;
 	void TryActivateItem(const FInventoryItemHandle& ItemHandle);
 	void TryPurchase(const UPA_ShopItem* ItemToPurchase);
 	void SellItem(const FInventoryItemHandle& ItemHandle);
@@ -55,6 +57,7 @@ private:
 	UPROPERTY()
 	TMap<FInventoryItemHandle, UInventoryItem*> InventoryMap;
 
+	void AbilityCommitted(class UGameplayAbility* CommittedAbility);
 	/*********************************************************/
 	/*                   Server                              */
 	/*********************************************************/
