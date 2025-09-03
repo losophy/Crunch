@@ -84,7 +84,7 @@ void UCAssetManager::AddToCombinationMap(const UPA_ShopItem* Ingredient, const U
 	if (Combinations)
 	{
 		if (!Combinations->Contains(CombinationItem))
-			CombinationMap.Add(CombinationItem);
+			Combinations->AddItem(CombinationItem);
 	}
 	else
 	{

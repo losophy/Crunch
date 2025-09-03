@@ -24,6 +24,9 @@ private:
 	UPROPERTY(meta = (BindWidget))
 	UTileView* ShopItemList;
 
+	UPROPERTY(meta = (BindWidget))
+	class UItemTreeWidget* CombinationTree;
+
 	void LoadShopItems();
 	void ShopItemLoadFinished();
 	void ShopItemWidgetGenerated(UUserWidget& NewWidget);
@@ -33,4 +36,6 @@ private:
 
 	UPROPERTY()
 	UInventoryComponent* OwnerInventoryComponent;
+
+	void ShowItemCombination(const UShopItemWidget* ItemWidget);
 };
