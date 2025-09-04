@@ -4,6 +4,7 @@
 #include "Widgets/InventoryItemWidget.h"
 #include "Inventory/InventoryItem.h"
 #include "Components/TextBlock.h"
+#include "Components/Image.h"
 #include "Inventory/PA_ShopItem.h"
 #include "Widgets/InventoryItemDragDropOp.h"
 #include "Widgets/ItemToolTip.h"
@@ -133,5 +134,48 @@ bool UInventoryItemWidget::NativeOnDrop(const FGeometry& InGeometry, const FDrag
 
 void UInventoryItemWidget::StartCooldown(float CooldownDuration, float TimeRemaining)
 {
-	UE_LOG(LogTemp, Warning, TEXT("Starting Cooldown"));
+	CooldownTimeRemaining = TimeRemaining;
+	CooldownTimeDuration = CooldownDuration;
+	GetWorld()->GetTimerManager().SetTimer(CooldownDurationTimerHandle, this, &UInventoryItemWidget::CooldownFinished, CooldownTimeRemaining);
+	GetWorld()->GetTimerManager().SetTimer(CooldownUpdateTimerHandle, this, &UInventoryItemWidget::UpdateCooldown, CooldownUpdateInterval, true);
+
+	CooldownCountText->SetVisibility(ESlateVisibility::Visible);
+}
+
+void UInventoryItemWidget::CooldownFinished()
+{
+	GetWorld()->GetTimerManager().ClearTimer(CooldownUpdateTimerHandle);
+	CooldownCountText->SetVisibility(ESlateVisibility::Hidden);
+	if (GetItemIcon())
+	{
+		GetItemIcon()->GetDynamicMaterial()->SetScalarParameterValue(CooldownAmtDynamicMaterialParamName, 1.f);
+	}
+}
+
+void UInventoryItemWidget::UpdateCooldown()
+{
+	CooldownTimeRemaining -= CooldownUpdateInterval;
+	float CooldownAmt = 1.f - CooldownTimeRemaining / CooldownTimeDuration;
+	CooldownDisplayFormattingOptions.MaximumFractionalDigits = CooldownTimeRemaining > 1.f ? 0 : 2;
+	CooldownCountText->SetText(FText::AsNumber(CooldownTimeRemaining, &CooldownDisplayFormattingOptions));
+	if (GetItemIcon())
+	{
+		GetItemIcon()->GetDynamicMaterial()->SetScalarParameterValue(CooldownAmtDynamicMaterialParamName, CooldownAmt);
+	}
+}
+
+void UInventoryItemWidget::ClearCooldown()
+{
+	CooldownFinished();
+}
+
+void UInventoryItemWidget::SetIcon(UTexture2D* IconTexture)
+{
+	if (GetItemIcon())
+	{
+		GetItemIcon()->GetDynamicMaterial()->SetTextureParameterValue(IconTextureDynamicMaterialParamName, IconTexture);
+		return;
+	}
+
+	Super::SetIcon(IconTexture);
 }

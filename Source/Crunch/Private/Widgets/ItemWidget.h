@@ -20,6 +20,7 @@ public:
 	virtual void SetIcon(UTexture2D* IconTexture);
 protected:
 	UItemToolTip* SetToolTipWidget(const UPA_ShopItem* Item);
+	class UImage* GetItemIcon() const { return ItemIcon; }
 
 private:
 	UPROPERTY(meta = (BindWidget))
