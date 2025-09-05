@@ -77,7 +77,7 @@ private:
 	/*********************************************************/
 private:
 	UFUNCTION(Client, Reliable)
-	void Client_ItemAdded(FInventoryItemHandle AssignedHandle, const UPA_ShopItem* Item);
+	void Client_ItemAdded(FInventoryItemHandle AssignedHandle, const UPA_ShopItem* Item, FGameplayAbilitySpecHandle GrantedAbilitySpecHandle);
 
 	UFUNCTION(Client, Reliable)
 	void Client_ItemRemoved(FInventoryItemHandle ItemHandle);
