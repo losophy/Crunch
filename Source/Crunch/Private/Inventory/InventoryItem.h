@@ -71,6 +71,7 @@ public:
 	float GetAbilityCooldownTimeRemaining() const;
 	float GetAbilityCooldownDuration() const;
 	float GetAbilityManaCost() const;
+	bool CanCastAbility() const;
 
 private:
 	void ApplyGASModifications();
