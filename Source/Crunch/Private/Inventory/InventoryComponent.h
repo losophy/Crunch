@@ -42,6 +42,7 @@ public:
 	UInventoryItem* GetAvaliableStackForItem(const UPA_ShopItem* Item) const;
 	bool FindIngredientForItem(const UPA_ShopItem* Item, TArray<UInventoryItem*>& OutIngredients, const TArray<const UPA_ShopItem*>& IngredientToIgnore = TArray<const UPA_ShopItem*>{});
 	UInventoryItem* TryGetItemForShopItem(const UPA_ShopItem* Item) const;
+	void TryActivateItemInSlot(int SlotNumber);
 
 protected:
 	// Called when the game starts
