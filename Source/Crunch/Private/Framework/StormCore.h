@@ -18,6 +18,7 @@ public:
 protected:
 	// Called when the game starts or when spawned
 	virtual void BeginPlay() override;
+	virtual void PossessedBy(AController* NewController) override;
 
 public:	
 	// Called every frame
@@ -27,6 +28,9 @@ public:
 	virtual void SetupPlayerInputComponent(class UInputComponent* PlayerInputComponent) override;
 
 private:
+	UPROPERTY(EditDefaultsOnly, Category = "Move")
+	float MaxMoveSpeed = 500.f;
+
 	UPROPERTY(VisibleDefaultsOnly, Category = "Detection")
 	class USphereComponent* InfluenceRange;
 
@@ -37,9 +41,19 @@ private:
 	void InfluencerLeftRange(UPrimitiveComponent* OverlappedComponent, AActor* OtherActor, UPrimitiveComponent* OtherComp, int32 OtherBodyIndex);
 
 	void UpdateTeamWeight();
+	void UpdateGoal();
+
+	UPROPERTY(EditAnywhere, Category = "Team")
+	AActor* TeamOneGoal;
+
+	UPROPERTY(EditAnywhere, Category = "Team")
+	AActor* TeamTwoGoal;
 
 	int TeamOneInfluncerCount = 0;
 	int TeamTwoInfluncerCount = 0;
 
 	float TeamWeight = 0.f;
+
+	UPROPERTY()
+	class AAIController* OwnerAIC;
 };
