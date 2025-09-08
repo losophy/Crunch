@@ -27,12 +27,22 @@ public:
 	// Called to bind functionality to input
 	virtual void SetupPlayerInputComponent(class UInputComponent* PlayerInputComponent) override;
 
+	virtual void PostEditChangeProperty(struct FPropertyChangedEvent& PropertyChangedEvent) override;
 private:
+	UPROPERTY(EditDefaultsOnly, Category = "Move")
+	float InfluenceRadius = 1000.f;
+
 	UPROPERTY(EditDefaultsOnly, Category = "Move")
 	float MaxMoveSpeed = 500.f;
 
 	UPROPERTY(VisibleDefaultsOnly, Category = "Detection")
 	class USphereComponent* InfluenceRange;
+
+	UPROPERTY(VisibleDefaultsOnly, Category = "Detection")
+	class UDecalComponent* GroundDecalComponent;
+
+	UPROPERTY(VisibleDefaultsOnly, Category = "Detection")
+	class UCameraComponent* ViewCam;
 
 	UFUNCTION()
 	void NewInfluenerInRange(UPrimitiveComponent* OverlappedComponent, AActor* OtherActor, UPrimitiveComponent* OtherComp, int32 OtherBodyIndex, bool bFromSweep, const FHitResult& SweepResult);
