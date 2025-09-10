@@ -3,9 +3,12 @@
 
 #include "Widgets/GameplayWidget.h"
 #include "AbilitySystemBlueprintLibrary.h"
+#include "Components/WidgetSwitcher.h"
+#include "Components/CanvasPanel.h"
 #include "GAS/CAbilitySystemComponent.h"
 #include "AbilitySystemComponent.h"
 #include "Widgets/AbilityListView.h"
+#include "Widgets/GameplayMenu.h"
 #include "Widgets/ShopWidget.h"
 #include "Widgets/ValueGauge.h"
 #include "GAS/CAttributeSet.h"
@@ -22,6 +25,13 @@ void UGameplayWidget::NativeConstruct()
 		HealthBar->SetAndBoundToGameplayAttribute(OwnerAbilitySystemComponent, UCAttributeSet::GetHealthAttribute(), UCAttributeSet::GetMaxHealthAttribute());
 		ManaBar->SetAndBoundToGameplayAttribute(OwnerAbilitySystemComponent, UCAttributeSet::GetManaAttribute(), UCAttributeSet::GetMaxManaAttribute());
 	}
+
+	SetShowMouseCursor(false);
+	SetFocusToGameOnly();
+	if (GameplayMenu)
+	{
+		GameplayMenu->GetResumeButtonClickedEventDelegate().AddDynamic(this, &UGameplayWidget::ToggleGameplayMenu);
+	}
 }
 
 void UGameplayWidget::ConfigureAbilities(const TMap<ECAbilityInputID, TSubclassOf<class UGameplayAbility>>& Abilities)
@@ -35,7 +45,7 @@ void UGameplayWidget::ToggleShop()
 	{
 		ShopWidget->SetVisibility(ESlateVisibility::Visible);
 		PlayShopPopupAnimation(true);
-		SetOwinigPawnInputEnabled(false);
+		SetOwningPawnInputEnabled(false);
 		SetShowMouseCursor(true);
 		SetFocusToGameAndUI();
 		ShopWidget->SetFocus();
@@ -44,10 +54,38 @@ void UGameplayWidget::ToggleShop()
 	{
 		ShopWidget->SetVisibility(ESlateVisibility::HitTestInvisible);
 		PlayShopPopupAnimation(false);
-		SetOwinigPawnInputEnabled(true);
+		SetOwningPawnInputEnabled(true);
 		SetShowMouseCursor(false);
 		SetFocusToGameOnly();
 	}
+}
+
+void UGameplayWidget::ToggleGameplayMenu()
+{
+	if (MainSwitcher->GetActiveWidget() == GameplayMenuRootPanel)
+	{
+		MainSwitcher->SetActiveWidget(GameplayWidgetRootPanel);
+		SetOwningPawnInputEnabled(true);
+		SetShowMouseCursor(false);
+		SetFocusToGameOnly();
+	}
+	else
+	{
+		ShowGameplayMenu();
+	}
+}
+
+void UGameplayWidget::ShowGameplayMenu()
+{
+	MainSwitcher->SetActiveWidget(GameplayMenuRootPanel);
+	SetOwningPawnInputEnabled(false);
+	SetShowMouseCursor(true);
+	SetFocusToGameAndUI();
+}
+
+void UGameplayWidget::SetGameplayMenuTitle(const FString& NewTitle)
+{
+	GameplayMenu->SetTitleText(NewTitle);
 }
 
 void UGameplayWidget::PlayShopPopupAnimation(bool bPlayForward)
@@ -62,7 +100,7 @@ void UGameplayWidget::PlayShopPopupAnimation(bool bPlayForward)
 	}
 }
 
-void UGameplayWidget::SetOwinigPawnInputEnabled(bool bPawnInputEnabled)
+void UGameplayWidget::SetOwningPawnInputEnabled(bool bPawnInputEnabled)
 {
 	if (bPawnInputEnabled)
 	{

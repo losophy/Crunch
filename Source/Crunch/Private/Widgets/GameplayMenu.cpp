@@ -3,6 +3,7 @@
 
 #include "Widgets/GameplayMenu.h"
 #include "Kismet/KismetSystemLibrary.h"
+#include "Components/TextBlock.h"
 
 void UGameplayMenu::NativeConstruct()
 {
@@ -15,6 +16,11 @@ void UGameplayMenu::NativeConstruct()
 FOnButtonClickedEvent& UGameplayMenu::GetResumeButtonClickedEventDelegate()
 {
 	return ResumeBtn->OnClicked;
+}
+
+void UGameplayMenu::SetTitleText(const FString& NewTitle)
+{
+	MenuTitle->SetText(FText::FromString(NewTitle));
 }
 
 void UGameplayMenu::BackToMainMenu()
