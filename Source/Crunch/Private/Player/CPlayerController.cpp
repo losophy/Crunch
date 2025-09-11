@@ -64,6 +64,29 @@ void ACPlayerController::SetupInputComponent()
 	}
 }
 
+void ACPlayerController::MatchFinished(AActor* ViewTarget, int WiningTeam)
+{
+	if (!HasAuthority())
+		return;
+
+	CPlayerCharacter->DisableInput(this);
+	Client_MatchFinished(ViewTarget, WiningTeam);
+}
+
+void ACPlayerController::Client_MatchFinished_Implementation(AActor* ViewTarget, int WiningTeam)
+{
+	SetViewTargetWithBlend(ViewTarget, MatchFinishViewBlendTimeDuration);
+	FString WinLoseMsg = "You Win!";
+	if (GetGenericTeamId().GetId() != WiningTeam)
+	{
+		WinLoseMsg = "You Lose...";
+	}
+
+	GameplayWidget->SetGameplayMenuTitle(WinLoseMsg);
+	FTimerHandle ShowWinLoseStateTimerHandle;
+	GetWorldTimerManager().SetTimer(ShowWinLoseStateTimerHandle, this, &ACPlayerController::ShowWinLoseState, MatchFinishViewBlendTimeDuration);
+}
+
 void ACPlayerController::SpawnGameplayWidget()
 {
 	if (!IsLocalPlayerController())
@@ -90,5 +113,13 @@ void ACPlayerController::ToggleGameplayMenu()
 	if (GameplayWidget)
 	{
 		GameplayWidget->ToggleGameplayMenu();
+	}
+}
+
+void ACPlayerController::ShowWinLoseState()
+{
+	if (GameplayWidget)
+	{
+		GameplayWidget->ShowGameplayMenu();
 	}
 }
