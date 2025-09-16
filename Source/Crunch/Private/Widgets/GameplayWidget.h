@@ -74,6 +74,9 @@ private:
 	UPROPERTY(meta = (BindWidget))
 	class UCanvasPanel* GameplayMenuRootPanel;
 
+	UPROPERTY(meta = (BindWidget))
+	class UCrosshairWidget* CrosshairWidget;
+
 	UPROPERTY(Transient, meta = (BindWidgetAnim))
 	class UWidgetAnimation* ShopPopupAnimation;
 
