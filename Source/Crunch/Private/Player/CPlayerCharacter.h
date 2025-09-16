@@ -19,6 +19,7 @@ public:
 	ACPlayerCharacter();
 	virtual void PawnClientRestart() override;
 	virtual void SetupPlayerInputComponent(class UInputComponent* PlayerInputComponent) override;
+	virtual void GetActorEyesViewPoint(FVector& OutLocation, FRotator& OutRotation) const  override;
 
 private:	
 	UPROPERTY(VisibleDefaultsOnly, Category = "View")

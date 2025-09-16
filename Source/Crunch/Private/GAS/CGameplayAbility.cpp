@@ -26,6 +26,44 @@ bool UCGameplayAbility::CanActivateAbility(const FGameplayAbilitySpecHandle Hand
     return Super::CanActivateAbility(Handle, ActorInfo, SourceTags, TargetTags, OptionalRelevantTags);
 }
 
+AActor* UCGameplayAbility::GetAimTarget(float AimDistance, ETeamAttitude::Type TeamAttitude) const
+{
+    AActor* OwnerAvatarActor = GetAvatarActorFromActorInfo();
+    if (OwnerAvatarActor)
+    {
+        FVector Location;
+        FRotator Rotation;
+        OwnerAvatarActor->GetActorEyesViewPoint(Location, Rotation);
+
+        FVector AimEnd = Location + Rotation.Vector() * AimDistance;
+
+        FCollisionQueryParams CollisionQueryParams;
+        CollisionQueryParams.AddIgnoredActor(OwnerAvatarActor);
+
+        FCollisionObjectQueryParams CollisionObjectQueryParams;
+        CollisionObjectQueryParams.AddObjectTypesToQuery(ECC_Pawn);
+
+        if (ShouldDrawDebug())
+        {
+            DrawDebugLine(GetWorld(), Location, AimEnd, FColor::Red, false, 2.f, 0U, 3.f);
+        }
+
+        TArray<FHitResult> HitResults;
+        if (GetWorld()->LineTraceMultiByObjectType(HitResults, Location, AimEnd, CollisionObjectQueryParams, CollisionQueryParams))
+        {
+            for (FHitResult& HitResult : HitResults)
+            {
+                if (IsActorTeamAttitudeIs(HitResult.GetActor(), TeamAttitude))
+                {
+                    return HitResult.GetActor();
+                }
+            }
+        }
+    }
+
+    return nullptr;
+}
+
 UAnimInstance* UCGameplayAbility::GetOwnerAnimInstance() const
 {
     USkeletalMeshComponent* OwnerSkeletalMeshComp = GetOwningComponentFromActorInfo();
@@ -153,6 +191,20 @@ FGenericTeamId UCGameplayAbility::GetOwnerTeamId() const
     }
 
     return FGenericTeamId::NoTeam;
+}
+
+bool UCGameplayAbility::IsActorTeamAttitudeIs(const AActor* OtherActor, ETeamAttitude::Type TeamAttitude) const
+{
+    if (!OtherActor)
+        return false;
+
+    IGenericTeamAgentInterface* OwnerTeamAgentInterface = Cast<IGenericTeamAgentInterface>(GetAvatarActorFromActorInfo());
+    if (OwnerTeamAgentInterface)
+    {
+        return OwnerTeamAgentInterface->GetTeamAttitudeTowards(*OtherActor) == TeamAttitude;
+    }
+
+    return false;
 }
 
 ACharacter* UCGameplayAbility::GetOwningAvatarCharacter()
