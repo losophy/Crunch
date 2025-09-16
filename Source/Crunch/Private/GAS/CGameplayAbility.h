@@ -29,6 +29,7 @@ protected:
 	void PushTargets(const FGameplayAbilityTargetDataHandle& TargetDataHandle, const FVector& PushVel);
 	void PlayMontageLocally(UAnimMontage* MontageToPlay);
 	void StopMontageAfterCurrentSection(UAnimMontage* MontageToStop);
+	FGenericTeamId GetOwnerTeamId() const;
 
 	ACharacter* GetOwningAvatarCharacter();
 	void ApplyGameplayEffectToHitResultActor(const FHitResult& HitResult, TSubclassOf<UGameplayEffect> GameplayEffect, int Level = 1);

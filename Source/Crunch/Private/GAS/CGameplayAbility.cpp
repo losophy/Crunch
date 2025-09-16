@@ -144,6 +144,17 @@ void UCGameplayAbility::StopMontageAfterCurrentSection(UAnimMontage* MontageToSt
     }
 }
 
+FGenericTeamId UCGameplayAbility::GetOwnerTeamId() const
+{
+    IGenericTeamAgentInterface* OwnerTeamInterface = Cast<IGenericTeamAgentInterface>(GetAvatarActorFromActorInfo());
+    if (OwnerTeamInterface)
+    {
+        return OwnerTeamInterface->GetGenericTeamId();
+    }
+
+    return FGenericTeamId::NoTeam;
+}
+
 ACharacter* UCGameplayAbility::GetOwningAvatarCharacter()
 {
     if (!AvatarCharacter)
