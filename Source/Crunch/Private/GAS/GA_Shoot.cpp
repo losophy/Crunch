@@ -11,6 +11,7 @@
 UGA_Shoot::UGA_Shoot()
 {
 	ActivationOwnedTags.AddTag(UCAbilitySystemStatics::GetAimStatTag());
+	ActivationOwnedTags.AddTag(UCAbilitySystemStatics::GetCrosshairTag());
 }
 
 void UGA_Shoot::ActivateAbility(const FGameplayAbilitySpecHandle Handle, const FGameplayAbilityActorInfo* ActorInfo, const FGameplayAbilityActivationInfo ActivationInfo, const FGameplayEventData* TriggerEventData)

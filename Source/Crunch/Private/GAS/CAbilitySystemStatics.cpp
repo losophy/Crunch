@@ -77,6 +77,11 @@ FGameplayTag UCAbilitySystemStatics::GetGoldAttributeTag()
 	return FGameplayTag::RequestGameplayTag("attr.gold");
 }
 
+FGameplayTag UCAbilitySystemStatics::GetCrosshairTag()
+{
+	return FGameplayTag::RequestGameplayTag("stats.crosshair");
+}
+
 bool UCAbilitySystemStatics::IsHero(const AActor* ActorToCheck)
 {
 	const IAbilitySystemInterface* ActorISA = Cast<IAbilitySystemInterface>(ActorToCheck);
