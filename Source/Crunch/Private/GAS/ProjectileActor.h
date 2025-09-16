@@ -30,8 +30,12 @@ public:
 
 	/** Retrieve team identifier in form of FGenericTeamId */
 	virtual FGenericTeamId GetGenericTeamId() const { return TeamId; }
+	virtual void NotifyActorBeginOverlap(AActor* OtherActor) override;
 
 private:
+	UPROPERTY(EditDefaultsOnly, Category = "Gameplay Cue")
+	FGameplayTag HitGameplayCueTag;
+
 	UPROPERTY(Replicated)
 	FGenericTeamId TeamId;
 
@@ -55,5 +59,7 @@ public:
 	// Called every frame
 	virtual void Tick(float DeltaTime) override;
 
+private:
 	void TravelMaxDIstanceReached();
+	void SendLocalGameplayCue(AActor* CueTargetActor, const FHitResult& HitResult);
 };
