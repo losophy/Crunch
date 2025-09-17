@@ -34,7 +34,9 @@ public:
 	static FGameplayTag GetGoldAttributeTag();
 	static FGameplayTag GetCrosshairTag();
 
+	static bool IsActorDead(const AActor* ActorToCheck);
 	static bool IsHero(const AActor* ActorToCheck);
+	static bool ActorHasTag(const AActor* ActorToCheck, const FGameplayTag& Tag);
 	static bool IsAbilityAtMaxLevel(const FGameplayAbilitySpec& Spec);
 
 	static float GetStaticCooldownDurationForAbility(const UGameplayAbility* Ability);

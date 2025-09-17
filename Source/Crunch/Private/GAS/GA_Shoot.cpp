@@ -7,6 +7,8 @@
 #include "GAS/ProjectileActor.h"
 #include "Abilities/Tasks/AbilityTask_WaitGameplayEvent.h"
 #include "Abilities/Tasks/AbilityTask_PlayMontageAndWait.h"
+#include "AbilitySystemBlueprintLibrary.h"
+#include "AbilitySystemComponent.h"
 
 UGA_Shoot::UGA_Shoot()
 {
@@ -46,6 +48,18 @@ void UGA_Shoot::InputReleased(const FGameplayAbilitySpecHandle Handle, const FGa
 	K2_EndAbility();
 }
 
+void UGA_Shoot::EndAbility(const FGameplayAbilitySpecHandle Handle, const FGameplayAbilityActorInfo* ActorInfo, const FGameplayAbilityActivationInfo ActivationInfo, bool bReplicateEndAbility, bool bWasCancelled)
+{
+	if (AimTargetAbilitySystemComponent)
+	{
+		AimTargetAbilitySystemComponent->RegisterGameplayTagEvent(UCAbilitySystemStatics::GetDeadStatTag()).RemoveAll(this);
+		AimTargetAbilitySystemComponent = nullptr;
+	}
+
+	StopShooting(FGameplayEventData());
+	Super::EndAbility(Handle, ActorInfo, ActivationInfo, bReplicateEndAbility, bWasCancelled);
+}
+
 FGameplayTag UGA_Shoot::GetShootTag()
 {
 	return FGameplayTag::RequestGameplayTag("ability.shoot");
@@ -63,6 +77,9 @@ void UGA_Shoot::StartShooting(FGameplayEventData Payload)
 	{
 		PlayMontageLocally(ShootMontage);
 	}
+
+	FindAimTarget();
+	StartAimTargetCheckTimer();
 }
 
 void UGA_Shoot::StopShooting(FGameplayEventData Payload)
@@ -72,6 +89,8 @@ void UGA_Shoot::StopShooting(FGameplayEventData Payload)
 	{
 		StopMontageAfterCurrentSection(ShootMontage);
 	}
+
+	StopAimTargetCheckTimer();
 }
 
 void UGA_Shoot::ShootProjectile(FGameplayEventData Payload)
@@ -107,6 +126,79 @@ void UGA_Shoot::ShootProjectile(FGameplayEventData Payload)
 
 AActor* UGA_Shoot::GetAimTargetIfValid() const
 {
-	AActor* AimTarget = GetAimTarget(ShootProjectileRange, ETeamAttitude::Hostile);
-	return AimTarget;
+	if (HasValidTarget())
+		return AimTarget;
+
+	return nullptr;
+}
+
+void UGA_Shoot::FindAimTarget()
+{
+	if (HasValidTarget())
+		return;
+
+	if (AimTargetAbilitySystemComponent)
+	{
+		AimTargetAbilitySystemComponent->RegisterGameplayTagEvent(UCAbilitySystemStatics::GetDeadStatTag()).RemoveAll(this);
+		AimTargetAbilitySystemComponent = nullptr;
+	}
+
+	AimTarget = GetAimTarget(ShootProjectileRange, ETeamAttitude::Hostile);
+	if (AimTarget)
+	{
+		AimTargetAbilitySystemComponent = UAbilitySystemBlueprintLibrary::GetAbilitySystemComponent(AimTarget);
+		if (AimTargetAbilitySystemComponent)
+		{
+			AimTargetAbilitySystemComponent->RegisterGameplayTagEvent(UCAbilitySystemStatics::GetDeadStatTag()).AddUObject(this, &UGA_Shoot::TargetDeadTagUpdated);
+		}
+	}
+}
+
+void UGA_Shoot::StartAimTargetCheckTimer()
+{
+	UWorld* World = GetWorld();
+	if (World)
+	{
+		World->GetTimerManager().SetTimer(AimTargetCheckTimerHandle, this, &UGA_Shoot::FindAimTarget, AimTargetCheckTimeInterval, true);
+	}
+}
+
+void UGA_Shoot::StopAimTargetCheckTimer()
+{
+	UWorld* World = GetWorld();
+	if (World)
+	{
+		World->GetTimerManager().ClearTimer(AimTargetCheckTimerHandle);
+	}
+}
+
+bool UGA_Shoot::HasValidTarget() const
+{
+	if (!AimTarget)
+		return false;
+
+	if (UCAbilitySystemStatics::IsActorDead(AimTarget))
+		return false;
+
+	if (!IsTargetInRange())
+		return false;
+
+	return true;
+}
+
+bool UGA_Shoot::IsTargetInRange() const
+{
+	if (!AimTarget)
+		return false;
+
+	float Distance = FVector::Distance(AimTarget->GetActorLocation(), GetAvatarActorFromActorInfo()->GetActorLocation());
+	return Distance <= ShootProjectileRange;
+}
+
+void UGA_Shoot::TargetDeadTagUpdated(const FGameplayTag Tag, int32 NewCount)
+{
+	if (NewCount > 0)
+	{
+		FindAimTarget();
+	}
 }
