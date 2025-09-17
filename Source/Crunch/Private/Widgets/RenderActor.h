@@ -16,6 +16,7 @@ public:
 	ARenderActor();
 	void SetRenderTarget(class UTextureRenderTarget2D* RenderTarget);
 	void UpdateRender();
+	FORCEINLINE class USceneCaptureComponent2D* GetCaptureComponent() const { return CaptureComponent; }
 
 protected:
 	// Called when the game starts or when spawned
