@@ -18,6 +18,12 @@ public:
 	virtual void NativeConstruct() override;
 	virtual void NativeTick(const FGeometry& MyGeometry, float InDeltaTime) override;
 private:
+	UPROPERTY(EditDefaultsOnly, Category = "View")
+	FLinearColor HasTargetColor = FLinearColor::Red;
+
+	UPROPERTY(EditDefaultsOnly, Category = "View")
+	FLinearColor NoTargetColor = FLinearColor::White;
+
 	UPROPERTY(meta = (BindWidget))
 	class UImage* CrosshairImage;
 
@@ -30,4 +36,9 @@ private:
 	class APlayerController* CachedPlayerController;
 
 	void UpdateCrosshairPosition();
+
+	UPROPERTY()
+	const AActor* AimTarget;
+
+	void TargetUpdated(const struct FGameplayEventData* EventData);
 };

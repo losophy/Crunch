@@ -19,6 +19,7 @@ void UCrosshairWidget::NativeConstruct()
 	if (OwnerAbilitySystemComponent)
 	{
 		OwnerAbilitySystemComponent->RegisterGameplayTagEvent(UCAbilitySystemStatics::GetCrosshairTag()).AddUObject(this, &UCrosshairWidget::CrosshairTagUpdated);
+		OwnerAbilitySystemComponent->GenericGameplayEventCallbacks.Add(UCAbilitySystemStatics::GetTargetUpdatedTag()).AddUObject(this, &UCrosshairWidget::TargetUpdated);
 	}
 	CachedPlayerController = GetOwningPlayer();
 
@@ -51,6 +52,23 @@ void UCrosshairWidget::UpdateCrosshairPosition()
 	float ViewportScale = UWidgetLayoutLibrary::GetViewportScale(this);
 	int32 SizeX, SizeY;
 	CachedPlayerController->GetViewportSize(SizeX, SizeY);
-	FVector2D ViewportSize = FVector2D{ (float)SizeX, (float)SizeY };
-	CrosshairCanvasPanelSlot->SetPosition(ViewportSize / 2.f / ViewportScale);
+	if (!AimTarget)
+	{
+		FVector2D ViewportSize = FVector2D{ (float)SizeX, (float)SizeY };
+		CrosshairCanvasPanelSlot->SetPosition(ViewportSize / 2.f / ViewportScale);
+		return;
+	}
+
+	FVector2D TargetScreenPosition;
+	CachedPlayerController->ProjectWorldLocationToScreen(AimTarget->GetActorLocation(), TargetScreenPosition);
+	if (TargetScreenPosition.X > 0 && TargetScreenPosition.X < SizeX && TargetScreenPosition.Y > 0 && TargetScreenPosition.Y < SizeY)
+	{
+		CrosshairCanvasPanelSlot->SetPosition(TargetScreenPosition / ViewportScale);
+	}
+}
+
+void UCrosshairWidget::TargetUpdated(const FGameplayEventData* EventData)
+{
+	AimTarget = EventData->Target;
+	CrosshairImage->SetColorAndOpacity(AimTarget ? HasTargetColor : NoTargetColor);
 }

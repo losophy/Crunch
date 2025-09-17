@@ -36,6 +36,7 @@ protected:
 
 	ACharacter* GetOwningAvatarCharacter();
 	void ApplyGameplayEffectToHitResultActor(const FHitResult& HitResult, TSubclassOf<UGameplayEffect> GameplayEffect, int Level = 1);
+	void SendLocalGameplayEvent(const FGameplayTag& EventTag, const FGameplayEventData& EventData);
 private:
 	UPROPERTY(EditDefaultsOnly, Category = "Debug")
 	bool bShouldDrawDebug = false;
