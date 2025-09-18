@@ -29,6 +29,8 @@ public:
 	/** Retrieve team identifier in form of FGenericTeamId */
 	FORCEINLINE virtual FGenericTeamId GetGenericTeamId() const override { return TeamId; }
 	virtual void GetLifetimeReplicatedProps(TArray<FLifetimeProperty>& OutLifetimeProps) const override;
+	virtual void StartTargeting(UGameplayAbility* Ability) override;
+	virtual void Tick(float DeltaTime) override;
 private:
 	UPROPERTY(Replicated)
 	float TargetRange;
@@ -48,6 +50,9 @@ private:
 	UPROPERTY(Replicated)
 	const AActor* AvatarActor;
 
+	UPROPERTY(EditDefaultsOnly, Category = "VFX")
+	FName LazerFXLengthParamName = "Length";
+
 	UPROPERTY(VisibleDefaultsOnly, Category = "Component")
 	class USceneComponent* RootComp;
 
@@ -56,4 +61,10 @@ private:
 
 	UPROPERTY(VisibleDefaultsOnly, Category = "Component")
 	class USphereComponent* TargetEndDetectionSphere;
+
+	FTimerHandle PeoridicalTargetingTimerHandle;
+
+	void DoTargetCheckAndReport();
+
+	void UpdateTargetTrace();
 };
