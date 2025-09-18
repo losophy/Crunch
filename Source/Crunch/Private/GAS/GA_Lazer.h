@@ -29,6 +29,12 @@ private:
 	float TargetingInterval = 0.3f;
 
 	UPROPERTY(EditDefaultsOnly, Category = "Effects")
+	TSubclassOf<UGameplayEffect> HitDamageEffect;
+
+	UPROPERTY(EditDefaultsOnly, Category = "Effects")
+	float HitPushSpeed = 3000.f;
+
+	UPROPERTY(EditDefaultsOnly, Category = "Effects")
 	TSubclassOf<UGameplayEffect> OnGoingConsumtionEffect;
 
 	FActiveGameplayEffectHandle OnGoingConsumtionEffectHandle;

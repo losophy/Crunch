@@ -71,8 +71,40 @@ void ATargetActor_Line::Tick(float DeltaTime)
 	UpdateTargetTrace();
 }
 
+void ATargetActor_Line::BeginDestroy()
+{
+	if (GetWorld() && PeoridicalTargetingTimerHandle.IsValid())
+	{
+		GetWorldTimerManager().ClearTimer(PeoridicalTargetingTimerHandle);
+	}
+
+	Super::BeginDestroy();
+}
+
 void ATargetActor_Line::DoTargetCheckAndReport()
 {
+	if (!HasAuthority())
+		return;
+
+	TSet<AActor*> OverlappingActorSet;
+	TargetEndDetectionSphere->GetOverlappingActors(OverlappingActorSet);
+
+	TArray<TWeakObjectPtr<AActor>> OverlappingActors;
+	for (AActor* OverlappingActor : OverlappingActorSet)
+	{
+		if (ShouldReportActorAsTarget(OverlappingActor))
+		{
+			OverlappingActors.Add(OverlappingActor);
+		}
+	}
+
+	FGameplayAbilityTargetDataHandle TargetDataHandle;
+
+	FGameplayAbilityTargetData_ActorArray* ActorArray = new FGameplayAbilityTargetData_ActorArray;
+	ActorArray->SetActors(OverlappingActors);
+	TargetDataHandle.Add(ActorArray);
+
+	TargetDataReadyDelegate.Broadcast(TargetDataHandle);
 }
 
 void ATargetActor_Line::UpdateTargetTrace()
@@ -120,4 +152,21 @@ void ATargetActor_Line::UpdateTargetTrace()
 	{
 		LazerVFX->SetVariableFloat(LazerFXLengthParamName, LineLength / 100.f);
 	}
+}
+
+bool ATargetActor_Line::ShouldReportActorAsTarget(const AActor* ActorToCheck) const
+{
+	if (!ActorToCheck)
+		return false;
+
+	if (ActorToCheck == AvatarActor)
+		return false;
+
+	if (ActorToCheck == this)
+		return false;
+
+	if (GetTeamAttitudeTowards(*ActorToCheck) != ETeamAttitude::Hostile)
+		return false;
+
+	return true;
 }
