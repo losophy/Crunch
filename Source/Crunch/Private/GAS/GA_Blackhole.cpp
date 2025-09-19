@@ -96,10 +96,28 @@ void UGA_Blackhole::PlaceBlackhole(const FGameplayAbilityTargetDataHandle& Targe
 
 void UGA_Blackhole::PlacementCancelled(const FGameplayAbilityTargetDataHandle& TargetDataHandle)
 {
+	K2_EndAbility();
 }
 
 void UGA_Blackhole::FinalTargetsReceived(const FGameplayAbilityTargetDataHandle& TargetDataHandle)
 {
+	if (K2_HasAuthority())
+	{
+		BP_ApplyGameplayEffectToTarget(TargetDataHandle, FinalBlowDamageEffect, GetAbilityLevel(CurrentSpecHandle, CurrentActorInfo));
+		FVector BlowCenter = UAbilitySystemBlueprintLibrary::GetHitResultFromTargetData(TargetDataHandle, 1).ImpactPoint;
+		PushTargetsFromLocation(TargetDataHandle, BlowCenter, BlowPushSpeed);
+
+		UAbilityTask_PlayMontageAndWait* PlayFinalBlowMontage = UAbilityTask_PlayMontageAndWait::CreatePlayMontageAndWaitProxy(this, NAME_None, FinalBlowMontage);
+		PlayFinalBlowMontage->OnBlendOut.AddDynamic(this, &UGA_Blackhole::K2_EndAbility);
+		PlayFinalBlowMontage->OnCancelled.AddDynamic(this, &UGA_Blackhole::K2_EndAbility);
+		PlayFinalBlowMontage->OnInterrupted.AddDynamic(this, &UGA_Blackhole::K2_EndAbility);
+		PlayFinalBlowMontage->OnCompleted.AddDynamic(this, &UGA_Blackhole::K2_EndAbility);
+		PlayFinalBlowMontage->ReadyForActivation();
+	}
+	else
+	{
+		PlayMontageLocally(FinalBlowMontage);
+	}
 }
 
 void UGA_Blackhole::AddAimEffect()
