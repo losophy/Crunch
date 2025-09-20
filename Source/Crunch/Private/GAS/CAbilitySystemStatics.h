@@ -24,6 +24,7 @@ public:
 	static FGameplayTag GetDeadStatTag();
 	static FGameplayTag GetStunStatTag();	
 	static FGameplayTag GetAimStatTag();
+	static FGameplayTag GetFocusStatTag();
 	static FGameplayTag GetCameraShakeGameplayCueTag();
 	static FGameplayTag GetHealthFullStatTag();
 	static FGameplayTag GetHealthEmptyStatTag();

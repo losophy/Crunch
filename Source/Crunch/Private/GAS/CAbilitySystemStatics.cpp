@@ -37,6 +37,11 @@ FGameplayTag UCAbilitySystemStatics::GetAimStatTag()
 	return FGameplayTag::RequestGameplayTag("stats.aim");
 }
 
+FGameplayTag UCAbilitySystemStatics::GetFocusStatTag()
+{
+	return FGameplayTag::RequestGameplayTag("stats.focus");
+}
+
 FGameplayTag UCAbilitySystemStatics::GetCameraShakeGameplayCueTag()
 {
 	return FGameplayTag::RequestGameplayTag("GameplayCue.cameraShake");
