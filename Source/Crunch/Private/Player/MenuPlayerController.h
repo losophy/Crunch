@@ -13,5 +13,16 @@ UCLASS()
 class AMenuPlayerController : public APlayerController
 {
 	GENERATED_BODY()
-	
+public:
+	virtual void BeginPlay() override;
+	virtual void OnRep_PlayerState() override;
+
+private:
+	UPROPERTY(EditDefaultsOnly, Category = "Menu")
+	TSubclassOf<UUserWidget> MenuWidgetClass;
+
+	UPROPERTY()
+	UUserWidget* MenuWidget;
+
+	void SpawnWidget();
 };
