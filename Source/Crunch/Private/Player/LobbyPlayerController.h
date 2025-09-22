@@ -13,5 +13,7 @@ UCLASS()
 class ALobbyPlayerController : public AMenuPlayerController
 {
 	GENERATED_BODY()
-	
+public:
+	UFUNCTION(Server, Reliable, WithValidation)
+	void Server_RequestSlotSelectionChange(uint8 NewSlotID);
 };
