@@ -57,4 +57,5 @@ private:
 	void StartHeroSelectionButtonClicked();
 
 	void SwitchToHeroSelection();
+	void CharacterDefinationLoaded();
 };
