@@ -7,6 +7,8 @@
 #include "Player/PlayerInfoTypes.h"
 #include "CGameState.generated.h"
 
+class UPA_CharacterDefination;
+
 DECLARE_MULTICAST_DELEGATE_OneParam(FOnPlayerSelectionUpdated, const TArray<FPlayerSelection>& /*NewPlayerSelection*/);
 /**
  *
@@ -17,7 +19,10 @@ class ACGameState : public AGameStateBase
 	GENERATED_BODY()
 public:
 	void RequestPlayerSelectionChange(const APlayerState* RequestingPlayer, uint8 DesiredSlot);
+	void SetCharacterSelected(const APlayerState* SelectingPlayer, const UPA_CharacterDefination* SelectedDefination);
 	bool IsSlotOccupied(uint8 SlotId) const;
+	bool IsDefiniationSelected(const UPA_CharacterDefination* Definiation) const;
+	void SetCharacterDeselected(const UPA_CharacterDefination* DefiniationToDeselect);
 
 	FOnPlayerSelectionUpdated OnPlayerSelectionUpdated;
 	virtual void GetLifetimeReplicatedProps(TArray< FLifetimeProperty >& OutLifetimeProps) const override;
