@@ -5,6 +5,7 @@
 #include "Character/PA_CharacterDefination.h"
 #include "Components/UniformGridPanel.h"
 #include "Components/UniformGridSlot.h"
+#include "Components/TileView.h"
 #include "Components/Button.h"
 #include "Components/WidgetSwitcher.h"
 #include "Framework/CAssetManager.h"
@@ -120,9 +121,6 @@ void ULobbyWidget::CharacterDefinationLoaded()
 	TArray<UPA_CharacterDefination*> LoadedCharacterDefinations;
 	if (UCAssetManager::Get().GetLoadedCharacterDefinations(LoadedCharacterDefinations))
 	{
-		for (UPA_CharacterDefination* LoadedCharacterDefination : LoadedCharacterDefinations)
-		{
-			UE_LOG(LogTemp, Warning, TEXT("Loaded Character: %s"), *(LoadedCharacterDefination->GEtCharacterDisplayName()));
-		}
+		CharacterSelectionTileView->SetListItems(LoadedCharacterDefinations);
 	}
 }
