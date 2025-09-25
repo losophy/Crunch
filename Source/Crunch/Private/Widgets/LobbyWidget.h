@@ -44,6 +44,9 @@ private:
 	UPROPERTY(meta = (BindWidget))
 	class UTileView* CharacterSelectionTileView;
 
+	UPROPERTY(meta = (BindWidget))
+	class UAbilityListView* AbilityListView;
+
 	UPROPERTY()
 	class ALobbyPlayerController* LobbyPlayerController;
 
