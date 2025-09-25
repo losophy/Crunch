@@ -13,7 +13,7 @@ void UPlayerTeamSlotWidget::NativeConstruct()
 	CachedCharacterNameStr = "";
 }
 
-void UPlayerTeamSlotWidget::UpateSlot(const FString& PlayerName, const UPA_CharacterDefination* CharacterDefination)
+void UPlayerTeamSlotWidget::UpdateSlot(const FString& PlayerName, const UPA_CharacterDefination* CharacterDefination)
 {
 	CachedPlayerNameStr = PlayerName;
 

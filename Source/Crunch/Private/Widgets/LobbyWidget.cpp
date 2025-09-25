@@ -19,6 +19,7 @@
 #include "Widgets/CharacterDisplay.h"
 #include "Widgets/CharacterEntryWidget.h"
 #include "Widgets/TeamSelectionWidget.h"
+#include "Widgets/PlayerTeamLayoutWidget.h"
 
 void ULobbyWidget::NativeConstruct()
 {
@@ -131,6 +132,11 @@ void ULobbyWidget::UpdatePlayerSelectionDisplay(const TArray<FPlayerSelection>& 
 	if (CGameState)
 	{
 		StartHeroSelectionButton->SetIsEnabled(CGameState->CanStartHeroSelection());
+	}
+
+	if (PlayerTeamLayoutWidget)
+	{
+		PlayerTeamLayoutWidget->UpdatePlayerSelection(PlayerSelections);
 	}
 }
 

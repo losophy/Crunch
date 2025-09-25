@@ -16,7 +16,7 @@ class UPlayerTeamSlotWidget : public UUserWidget
 	GENERATED_BODY()
 public:
 	virtual void NativeConstruct() override;
-	void UpateSlot(const FString& PlayerName, const UPA_CharacterDefination* CharacterDefination);
+	void UpdateSlot(const FString& PlayerName, const UPA_CharacterDefination* CharacterDefination);
 
 	virtual void NativeOnMouseEnter(const FGeometry& InGeometry, const FPointerEvent& InMouseEvent) override;
 	virtual void NativeOnMouseLeave(const FPointerEvent& InMouseEvent) override;
