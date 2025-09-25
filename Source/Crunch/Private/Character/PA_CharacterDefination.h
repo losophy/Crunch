@@ -20,7 +20,7 @@ public:
 	virtual FPrimaryAssetId GetPrimaryAssetId() const override;
 	static FPrimaryAssetType GetCharacterDefinationAssetType();
 
-	FString GEtCharacterDisplayName() const { return CharacterName; }
+	FString GetCharacterDisplayName() const { return CharacterName; }
 	UTexture2D* LoadIcon() const;
 	TSubclassOf<ACCharacter> LoadCharacterClass() const;
 	TSubclassOf<UAnimInstance> LoadDisplayAnimationBP() const;
