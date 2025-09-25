@@ -59,6 +59,11 @@ private:
 	UPROPERTY(EditDefaultsOnly, Category = "Visual")
 	FName UpgradePointAvaliableParamName = "UpgradeAvaliable";
 
+	UPROPERTY(EditDefaultsOnly, Category = "Tool Tip")
+	TSubclassOf<class UAbilityToolTip> AbilityToolTipClass;
+
+	void CreateToolTipWidget(const FAbilityWidgetData* AbilityWidgetData);
+
 	UPROPERTY(meta = (BindWidget))
 	class UImage* Icon;
 
