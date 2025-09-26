@@ -5,6 +5,7 @@
 #include "CoreMinimal.h"
 #include "GameFramework/PlayerState.h"
 #include "Player/PlayerInfoTypes.h"
+#include "GenericTeamAgentInterface.h"
 #include "CPlayerState.generated.h"
 
 class UPA_CharacterDefination;
@@ -19,6 +20,9 @@ public:
 	ACPlayerState();
 	virtual void GetLifetimeReplicatedProps(TArray< FLifetimeProperty >& OutLifetimeProps) const override;
 	virtual void BeginPlay() override;
+	virtual void CopyProperties(APlayerState* PlayerState) override;
+	TSubclassOf<APawn> GetSelectedPawnClass() const;
+	FGenericTeamId GetTeamIdBasedOnSlot() const;
 	UFUNCTION(Server, Reliable, WithValidation)
 	void Server_SetSelectedCharacterDefination(const UPA_CharacterDefination* NewDefination);
 
