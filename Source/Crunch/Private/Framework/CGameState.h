@@ -28,6 +28,7 @@ public:
 	virtual void GetLifetimeReplicatedProps(TArray< FLifetimeProperty >& OutLifetimeProps) const override;
 	const TArray<FPlayerSelection>& GetPlayerSelection() const;
 	bool CanStartHeroSelection() const;
+	bool CanStartMatch() const;
 private:
 	UPROPERTY(ReplicatedUsing = OnRep_PlayerSelectionArray)
 	TArray<FPlayerSelection> PlayerSelectionArray;

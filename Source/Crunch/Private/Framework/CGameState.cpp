@@ -106,6 +106,19 @@ bool ACGameState::CanStartHeroSelection() const
 	return PlayerSelectionArray.Num() == PlayerArray.Num();
 }
 
+bool ACGameState::CanStartMatch() const
+{
+	for (const FPlayerSelection& PlayerSelection : PlayerSelectionArray)
+	{
+		if (PlayerSelection.GetCharacterDefination() == nullptr)
+		{
+			return false;
+		}
+	}
+
+	return true;
+}
+
 void ACGameState::OnRep_PlayerSelectionArray()
 {
 	OnPlayerSelectionUpdated.Broadcast(PlayerSelectionArray);

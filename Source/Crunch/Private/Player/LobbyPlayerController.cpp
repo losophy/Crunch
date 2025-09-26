@@ -3,6 +3,7 @@
 
 #include "Player/LobbyPlayerController.h"
 #include "GameFramework/PlayerState.h"
+#include "Framework/CGameInstance.h"
 #include "Framework/CGameState.h"
 
 void ALobbyPlayerController::Server_RequestSlotSelectionChange_Implementation(uint8 NewSlotID)
@@ -50,4 +51,18 @@ void ALobbyPlayerController::Client_StartHeroSelection_Implementation()
 ALobbyPlayerController::ALobbyPlayerController()
 {
 	bAutoManageActiveCameraTarget = false;
+}
+
+void ALobbyPlayerController::Server_RequestStartMatch_Implementation()
+{
+	UCGameInstance* CGameInstance = GetGameInstance<UCGameInstance>();
+	if (CGameInstance)
+	{
+		CGameInstance->StartMatch();
+	}
+}
+
+bool ALobbyPlayerController::Server_RequestStartMatch_Validate()
+{
+	return true;
 }
