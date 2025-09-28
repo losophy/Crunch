@@ -2,6 +2,7 @@
 
 
 #include "Framework/CGameInstance.h"
+#include "Network/CNetStatics.h"
 
 void UCGameInstance::StartMatch()
 {
@@ -9,6 +10,27 @@ void UCGameInstance::StartMatch()
 	{
 		LoadLevelAndListen(GameLevel);
 	}
+}
+
+void UCGameInstance::Init()
+{
+	Super::Init();
+	if (GetWorld()->IsEditorWorld())
+		return;
+
+	if (UCNetStatics::IsSessionServer(this))
+	{
+		CreateSession();
+	}
+}
+
+void UCGameInstance::CreateSession()
+{
+	ServerSesisonName = UCNetStatics::GetSessionNameStr();
+	FString SessionSearchId = UCNetStatics::GetSesisonSearchIdStr();
+	SessionServerPort = UCNetStatics::GetSessionPort();
+
+	UE_LOG(LogTemp, Warning, TEXT("#### Create Session With Name: %s, ID: %s, Port: %d"), *(ServerSesisonName), *(SessionSearchId), SessionServerPort)
 }
 
 void UCGameInstance::LoadLevelAndListen(TSoftObjectPtr<UWorld> Level)

@@ -15,6 +15,15 @@ class UCGameInstance : public UGameInstance
 	GENERATED_BODY()
 public:
 	void StartMatch();
+	virtual void Init() override;
+
+	/*************************************/
+	/*         Session Server            */
+	/*************************************/
+private:
+	void CreateSession();
+	FString ServerSesisonName;
+	int SessionServerPort;
 
 private:
 	UPROPERTY(EditDefaultsOnly, Category = "Map")

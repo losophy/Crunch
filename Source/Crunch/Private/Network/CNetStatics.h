@@ -15,4 +15,18 @@ class UCNetStatics : public UBlueprintFunctionLibrary
 	GENERATED_BODY()
 public:
 	static uint8 GetPlayerCountPerTeam();
+
+	static bool IsSessionServer(const UObject* WorldContextObject);
+
+	static FString GetSessionNameStr();
+	static FName GetSessionNameKey();
+
+	static FString GetSesisonSearchIdStr();
+	static FName GetSessionSearchIdKey();
+
+	static int GetSessionPort();
+	static FName GetPortKey();
+
+	static FString GetCommandlineArgAsString(const FName& ParamName);
+	static int GetCommandlineArgAsInt(const FName& ParamName);
 };
