@@ -3,6 +3,48 @@
 
 #include "Network/CNetStatics.h"
 
+FOnlineSessionSettings UCNetStatics::GenerateOnlineSesisonSettings(const FName& SessionName, const FString& SessionSearchId, int Port)
+{
+	FOnlineSessionSettings OnlineSessionSettings{};
+	OnlineSessionSettings.bIsLANMatch = false;
+	OnlineSessionSettings.NumPublicConnections = GetPlayerCountPerTeam() * 2;
+	OnlineSessionSettings.bShouldAdvertise = true;
+	OnlineSessionSettings.bUsesPresence = false;
+	OnlineSessionSettings.bAllowJoinViaPresence = false;
+	OnlineSessionSettings.bAllowJoinViaPresenceFriendsOnly = false;
+	OnlineSessionSettings.bAllowInvites = true;
+	OnlineSessionSettings.bAllowJoinInProgress = false;
+	OnlineSessionSettings.bUseLobbiesIfAvailable = false;
+	OnlineSessionSettings.bUseLobbiesVoiceChatIfAvailable = false;
+	OnlineSessionSettings.bUsesStats = true;
+
+	OnlineSessionSettings.Set(GetSessionNameKey(), SessionName.ToString(), EOnlineDataAdvertisementType::ViaOnlineServiceAndPing);
+	OnlineSessionSettings.Set(GetSessionSearchIdKey(), SessionSearchId, EOnlineDataAdvertisementType::ViaOnlineServiceAndPing);
+	OnlineSessionSettings.Set(GetPortKey(), Port, EOnlineDataAdvertisementType::ViaOnlineServiceAndPing);
+
+	return OnlineSessionSettings;
+}
+
+IOnlineSessionPtr UCNetStatics::GetSessionPtr()
+{
+	IOnlineSubsystem* OnlineSubSystem = IOnlineSubsystem::Get();
+	if (OnlineSubSystem)
+	{
+		return OnlineSubSystem->GetSessionInterface();
+	}
+	return nullptr;
+}
+
+IOnlineIdentityPtr UCNetStatics::GetIdentityPtr()
+{
+	IOnlineSubsystem* OnlineSubSystem = IOnlineSubsystem::Get();
+	if (OnlineSubSystem)
+	{
+		return OnlineSubSystem->GetIdentityInterface();
+	}
+	return nullptr;
+}
+
 uint8 UCNetStatics::GetPlayerCountPerTeam()
 {
 	return 5;
